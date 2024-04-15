@@ -1,0 +1,10 @@
+{
+  "printWidth": 80, // 一行代码的最大长度
+  "tabWidth": 2, // 每个缩进级别的空格数
+  "useTabs": false, // 是否使用制表符
+  "semi": true, // 是否在语句末尾添加分号
+  "singleQuote": false, // 是否使用单引号
+  "trailingComma": "none", // 数组或对象最后一个元素后面是否添加逗号
+  "bracketSpacing": true, // 对象的花括号是否有空格
+  "arrowParens": "avoid" // 单个箭头函数的参数是否添加圆括号
+}
