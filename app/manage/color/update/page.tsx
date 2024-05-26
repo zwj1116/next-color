@@ -3,7 +3,7 @@
 import { CloseOutlined, LeftOutlined } from '@ant-design/icons';
 import { Button, Card, Divider, Flex, Form, Steps } from 'antd';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import First from './first';
 
 const steps = [
@@ -23,9 +23,22 @@ const steps = [
 
 export default function Page() {
   const [current, setCurrent] = useState(0);
+  const childRef = useRef(null) as any;
+
+  fetch('/api/color').then(async (res) => {
+    const data = await res.json();
+  console.log(data);
+  })
 
   const next = () => {
-    setCurrent(current + 1);
+    childRef.current.form.validateFields().then((e: any) => {
+      fetch('/api/color').then(async (res) => {
+        const data = await res.json();
+      console.log(data);
+      })
+      
+      // setCurrent(current + 1);
+    })
   };
 
   const prev = () => {
@@ -46,10 +59,10 @@ export default function Page() {
       <Flex gap="large" vertical className='h-full'>
         <Steps current={current} items={steps} />
           <div className='w-full grow overflow-hidden'>
-            { current === 0 ? <First /> : '' }
+            { current === 0 ? <First ref={childRef} /> : '' }
             </div>
           <Flex justify="center" align='center' className="pt-2 border-t border-slate-200">
-            <Button type='primary'>
+            <Button type='primary' onClick={next}>
                 下一步
               </Button>
         </Flex>

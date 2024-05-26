@@ -2,12 +2,17 @@
 
 import { CloseOutlined } from '@ant-design/icons';
 import { Button, Card, Flex, Form, Input } from 'antd';
-import React from 'react';
+import React, { useImperativeHandle } from 'react';
 
 const { TextArea } = Input;
 
-export default function Page() {
+const ComFirst = React.forwardRef((props, ref) => {
   const [form] = Form.useForm();
+
+  useImperativeHandle(
+    ref,
+    () => ({ form }) //父组件通过ref获取值，要在这里抛出
+  );
 
   return (
     <>
@@ -20,7 +25,7 @@ export default function Page() {
     >
       <Flex className='h-full gap-2'>
         <div className='w-3/12 pr-2 overflow-y-auto shrink-0'>
-          <Form.Item label="色号" name="rgb">
+          <Form.Item label="色号" name="rgb" rules={[{ required: true, message: '请输入色号' }]}>
           <Input />
         </Form.Item>
         <Form.Item label="图片" name="pic">
@@ -92,4 +97,9 @@ export default function Page() {
     </Form>
     </>
   )
-}
+})
+
+ComFirst.displayName = 'ComFirst';
+
+export default ComFirst;
+
