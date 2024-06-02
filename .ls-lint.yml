@@ -1,0 +1,33 @@
+#用于校验项目内文件及文件夹的命名风格，可以统一项目文件命名风格
+
+ls:
+# 需要校验的文件夹
+  src/*:
+    #驼峰
+    .js: camelCase
+    # 大写开头 | index.vue
+    .vue: PascalCase | regex:^index
+    # 驼峰
+    .ts: camelCase
+    # 驼峰
+    .tsx: camelCase
+    # 小写分割线
+    .d.ts: kebab-case
+    .mock.ts: kebab-case
+    .data.ts: camelCase | kebab-case
+    .test-d.ts: kebab-case
+    .less: camelCase
+    .spec.ts: camelCase
+
+# 需要忽略的文件夹
+ignore:
+  - node_modules
+  - .git
+  - .circleci
+  - .github
+  - .vscode
+  - .idea
+  - dist
+  - .local
+  - .husky
+  - src/locales/lang

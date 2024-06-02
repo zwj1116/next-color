@@ -1,79 +1,47 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const fs = require("fs")
-
 module.exports = {
+  root: true,
+  env: {
+    browser: true,
+    node: true,
+    es6: true,
+  },
+  parser: 'vue-eslint-parser',
   extends: [
-    "next",
-    "prettier",
-    "react-app",
-    "react-app/jest",
-    "plugin:storybook/recommended",
-    "plugin:tailwindcss/recommended",
+    'plugin:@typescript-eslint/recommended',
+    'plugin:vue/vue3-recommended',
+    'eslint:recommended',
+    'plugin:prettier/recommended',
   ],
   parserOptions: {
-    babelOptions: {
-      presets: [require.resolve("next/babel")],
-    },
+    ecmaVersion: 12,
+    parser: '@typescript-eslint/parser',
+    sourceType: 'module',
+  },
+  plugins: ['vue', '@typescript-eslint', 'prettier'],
+  globals: {
+    window: true,
+    ActiveXObject: true,
+    EventListener: true,
+    AddEventListenerOptions: true,
+    __WebpackModuleApi: true,
   },
   rules: {
-    "tailwindcss/no-custom-classname": "off",
-    "testing-library/prefer-screen-queries": "off",
-    "@next/next/no-html-link-for-pages": "off",
-    "@typescript-eslint/no-unused-vars": [
-      "warn",
+    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-unused-vars': 'off',
+    'no-undef': 'off',
+    '@typescript-eslint/no-inferrable-types': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-empty-function': 'off',
+    'vue/multi-word-component-names': 'off',
+    'vue/attribute-hyphenation': 'off',
+    '@typescript-eslint/no-this-alias': [
+      'error',
       {
-        argsIgnorePattern: "^_",
-        varsIgnorePattern: "^_",
-      },
-    ],
-    "sort-imports": [
-      "error",
-      {
-        ignoreCase: true,
-        ignoreDeclarationSort: true,
-      },
-    ],
-    "tailwindcss/classnames-order": "off",
-    "import/order": [
-      1,
-      {
-        groups: ["external", "builtin", "internal", "sibling", "parent", "index"],
-        pathGroups: [
-          ...getDirectoriesToSort().map((singleDir) => ({
-            pattern: `${singleDir}/**`,
-            group: "internal",
-          })),
-          {
-            pattern: "env",
-            group: "internal",
-          },
-          {
-            pattern: "theme",
-            group: "internal",
-          },
-          {
-            pattern: "public/**",
-            group: "internal",
-            position: "after",
-          },
-        ],
-        pathGroupsExcludedImportTypes: ["internal"],
-        alphabetize: {
-          order: "asc",
-          caseInsensitive: true,
-        },
+        allowDestructuring: false, // Disallow `const { props, state } = this`; true by default
+        allowedNames: ['self', 'pc', 'token'], // Allow `const self = this`; `[]` by default
       },
     ],
   },
-}
-
-function getDirectoriesToSort() {
-  const ignoredSortingDirectories = [".git", ".next", ".vscode", "node_modules"]
-  return getDirectories(process.cwd()).filter((f) => !ignoredSortingDirectories.includes(f))
-}
-
-function getDirectories(path) {
-  return fs.readdirSync(path).filter(function (file) {
-    return fs.statSync(path + "/" + file).isDirectory()
-  })
-}
+};

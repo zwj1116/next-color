@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: yk-vue-screen
+  namespace: default
+  labels:
+    app: yk-vue-screen
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 7001 #service的的端口
+      targetPort: 80 #是pod也就是容器的端口
+  selector:     #将选择具有指定label标签的Pod作为管理范围
+    app: yk-vue-screen
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yk-vue-screen
+  labels:
+    app: yk-vue-screen
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1 #允许在升级过程中最多可以超过期望数值多少
+      maxUnavailable: 0 #升级过程中最多允许多少pod处于不可用状态
+  selector:
+    matchLabels:
+      app: yk-vue-screen
+  template:
+    metadata:
+      labels:
+        app: yk-vue-screen
+    spec:
+      terminationGracePeriodSeconds: 30
+      tolerations:
+        - {key: node-role.kubernetes.io/master, operator: Exists, effect: NoSchedule}
+      containers:
+        - name: yk-vue-screen
+          image: 10.0.50.18:8082/yk_vue_screen:1.0.0
+          imagePullPolicy: Always
+          resources:
+            limits: {cpu: 2.0, memory: 2000Mi}
+            requests: {cpu: 0.1, memory: 1000Mi}
+          ports:
+            - containerPort: 80
+      imagePullSecrets:
+        - name: dockercfg-1

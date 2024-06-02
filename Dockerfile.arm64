@@ -1,0 +1,6 @@
+FROM arm64v8/nginx:1.22.0
+RUN mkdir /usr/share/nginx/html/screen
+COPY screen/ /usr/share/nginx/html/screen/
+
+ADD nginx.conf /etc/nginx
+
