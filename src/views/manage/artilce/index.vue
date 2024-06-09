@@ -2,7 +2,7 @@
   <div class="flex flex-col gap-3 h-full">
     <Return :isTitle="true" message="文章列表"></Return>
     <div class="flex gap-2 justify-end">
-      <a-button type="primary">搜索</a-button>
+      <a-button type="primary" @click="btnFn.refresh">搜索</a-button>
       <router-link :to="{ name: 'opAartilce' }">
         <a-button>添加</a-button>
       </router-link>
@@ -41,6 +41,9 @@
         tableRef: null as any,
       });
       const btnFn = {
+        refresh: () => {
+          shallow.tableRef.tableFn.get();
+        },
         del: (record: any) => {
           Modal.confirm({
             title: '提示',
@@ -50,7 +53,7 @@
                 ArticleApi.del(record.id)
                   .then(() => {
                     notification.success({ message: '删除成功！' });
-                    shallow.tableRef.tableFn.get();
+                    btnFn.refresh();
                     resolve();
                   })
                   .catch(() => {

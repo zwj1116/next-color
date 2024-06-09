@@ -1,7 +1,7 @@
 <template>
-  <div class="flex flex-col gap-3">
+  <div class="flex flex-col gap-3 overflow-hidden">
     <a-table
-      class="sm max-sm:hidden"
+      class="sm max-sm:hidden overflow-auto"
       v-bind="$attrs"
       :dataSource="dataSource"
       :pagination="false"
@@ -11,7 +11,7 @@
         <slot :name="name" v-bind="slotProps || {}"></slot>
       </template>
     </a-table>
-    <div class="max-sm sm:hidden flex flex-col gap-3">
+    <div class="max-sm sm:hidden flex flex-col gap-3 overflow-auto">
       <div v-for="(item, index) in dataSource" :key="index" class="bg-white border rounded-lg">
         <div v-for="(column, _index) in $attrs.columns" :key="_index" class="p-2 flex">
           <span class="shrink-0 w-20" :title="column.tilte">{{ `${column.title}: ` }}</span>
@@ -26,6 +26,7 @@
       v-model:page-size="paginaiton.pageSize"
       class="text-right"
       show-quick-jumper
+      showSizeChanger
       :total="paginaiton.total"
       :show-total="(total) => `总共 ${total} 条`"
       @change="tableFn.onChange"
@@ -73,8 +74,12 @@
               })
               .catch(() => {});
         },
-        onChange: () => {},
-        showSizeChange: () => {},
+        onChange: () => {
+          tableFn.get();
+        },
+        showSizeChange: () => {
+          tableFn.get();
+        },
       };
       onMounted(() => tableFn.get());
       return {

@@ -52,14 +52,14 @@ module.exports = merge(baseConfig, {
       // polling interval（ms）
       checkInterval: 60 * 1000,
     }),
-    new CopyPlugin({
-      patterns: [
-        {
-          from: resolve('../public/libpag.wasm'),
-          to: resolve(`../${ASSET_PATH}/static/js/`),
-        },
-      ],
-    }),
+    // new CopyPlugin({
+    //   patterns: [
+    //     {
+    //       from: resolve('../public/libpag.wasm'),
+    //       to: resolve(`../${ASSET_PATH}/static/js/`),
+    //     },
+    //   ],
+    // }),
   ],
   optimization: {
     minimize: true,
