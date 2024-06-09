@@ -14,6 +14,10 @@ import {
   Col,
   Menu,
   Layout,
+  Pagination,
+  Form,
+  Table,
+  Divider,
 } from 'ant-design-vue';
 
 const components = [
@@ -30,6 +34,10 @@ const components = [
   Col,
   Menu,
   Layout,
+  Pagination,
+  Form,
+  Table,
+  Divider,
 ];
 
 export default function setupAntd(app: App<Element>) {

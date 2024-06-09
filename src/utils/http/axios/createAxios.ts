@@ -59,7 +59,7 @@ service.interceptors.response.use((response: AxiosResponse) => {
     if (response.data === '') {
       showNft('服务异常');
       return Promise.reject(response);
-    } else if (response.data.code !== 0) {
+    } else if (response.data.code !== 200) {
       const msg: string = response.data.msg;
       showNft(msg);
       if (needReLoginCodes.indexOf(response.data.code) > -1) {

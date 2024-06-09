@@ -1,15 +1,74 @@
 <template>
-  <div class="flex felx-col gap-3">
+  <div class="flex flex-col gap-3">
     <Return :isTitle="true" message="文章列表"></Return>
+    <div class="flex gap-2 justify-end">
+      <a-button type="primary">搜索</a-button>
+      <router-link :to="{ name: 'opAartilce' }">
+        <a-button>添加</a-button>
+      </router-link>
+    </div>
+    <ResonsiveTable ref="tableRef" :columns="columns" :api="ArticleApi.page">
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.dataIndex === 'action'">
+          <div class="flex gap-2 items-center">
+            <router-link :to="{ name: 'detailArtilce' }">
+              <a>详情</a>
+            </router-link>
+            <a-divider type="vertical" />
+            <router-link :to="{ name: 'opAartilce' }">
+              <a>编辑</a>
+            </router-link>
+            <a-divider type="vertical" />
+            <a @click="btnFn.del(record)">删除</a>
+          </div>
+        </template>
+      </template>
+    </ResonsiveTable>
   </div>
 </template>
 <script lang="ts">
   import { defineComponent } from 'vue';
   import Return from '@/components/Return/index.vue';
+  import ResonsiveTable from '@/components/ResponsiveTable/index.vue';
+  import ArticleApi from '@/api/article';
+  import { columns } from './config';
+  import { Modal, notification } from 'ant-design-vue';
 
   export default defineComponent({
-    components: { Return },
-    setup() {},
+    components: { Return, ResonsiveTable },
+    setup() {
+      const shallow = shallowReactive({
+        tableRef: null as any,
+      });
+      const btnFn = {
+        del: (record: any) => {
+          Modal.confirm({
+            title: '提示',
+            content: `确定删除【${record.title}吗？】`,
+            async onOk() {
+              return await new Promise<void>((resolve, reject) => {
+                ArticleApi.del(record.id)
+                  .then(() => {
+                    notification.success({ message: '删除成功！' });
+                    shallow.tableRef.tableFn.get();
+                    resolve();
+                  })
+                  .catch(() => {
+                    reject();
+                  });
+              });
+            },
+            onCancel() {},
+          });
+        },
+      };
+      return {
+        ArticleApi,
+        columns,
+        btnFn,
+        ...toRefs(shallow),
+      };
+    },
   });
 </script>
 <style lang="less" scoped></style>
