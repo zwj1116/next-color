@@ -1,9 +1,10 @@
 <template>
-  <a-layout-sider width="200" theme="dark" breakpoint="lg" collapsed-width="0">
+  <a-layout-sider width="200" breakpoint="lg" collapsed-width="0">
     <a-menu
       v-model:selectedKeys="selectedKeys2"
       v-model:openKeys="openKeys"
       mode="inline"
+      theme="dark"
       :items="menus"
       :style="{ height: '100%', borderRight: 0 }"
     >

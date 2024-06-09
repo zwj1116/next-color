@@ -6,7 +6,7 @@
     <a-layout class="overflow-hidden" style="height: calc(100% - 64px)">
       <Sider />
       <a-layout style="padding: 16px">
-        <a-layout-content class="overflow-auto bg-white">
+        <a-layout-content class="overflow-auto">
           <router-view></router-view>
         </a-layout-content>
       </a-layout>

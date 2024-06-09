@@ -49,7 +49,11 @@ async function validatePort(rule: RuleObject, value: string) {
   if (isEmpty(value)) {
     return Promise.reject('端口不能为空');
   }
-  if (!/^([1-9](\d{0,3}))$|^([1-5]\d{4})$|^(6[0-4]\d{3})$|^(65[0-4]\d{2})$|^(655[0-2]\d)$|^(6553[0-5])$/.test(value)) {
+  if (
+    !/^([1-9](\d{0,3}))$|^([1-5]\d{4})$|^(6[0-4]\d{3})$|^(65[0-4]\d{2})$|^(655[0-2]\d)$|^(6553[0-5])$/.test(
+      value
+    )
+  ) {
     return Promise.reject('端口范围1-65535');
   } else {
     return Promise.resolve();

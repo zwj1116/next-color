@@ -38,18 +38,39 @@ export const allRoutes = [
     path: '/manage',
     name: 'manage',
     component: () => import('@/views/layout/ManageLayout.vue'),
-    redirect: '/manage/user',
+    redirect: '/manage/artilce',
     meta: {
       title: '主页',
       keepAlive: true,
     },
     children: [
       {
-        path: 'user',
-        name: 'user',
-        component: () => import('@/views/manage/user/index.vue'),
+        path: 'artilce',
+        name: 'artilce',
+        component: () => import('@/views/manage/artilce/index.vue'),
         meta: {
-          title: '用户管理',
+          title: '文章列表',
+          parentPath: 'artilce',
+          keepAlive: true,
+        },
+      },
+      {
+        path: 'opAartilce',
+        name: 'opAartilce',
+        component: () => import('@/views/manage/artilce/Op.vue'),
+        meta: {
+          title: '文章操作',
+          parentPath: 'artilce',
+          keepAlive: true,
+        },
+      },
+      {
+        path: 'detailArtilce',
+        name: 'detailArtilce',
+        component: () => import('@/views/manage/artilce/Detail.vue'),
+        meta: {
+          title: '文章详情',
+          parentPath: 'artilce',
           keepAlive: true,
         },
       },
