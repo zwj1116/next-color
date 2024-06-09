@@ -6,21 +6,33 @@
         <a-input v-model:value="formState.title" />
       </a-form-item>
     </a-form>
-    <div class="overflow-hidden border rounded-lg">
-      <Toolbar class="border-b" :editor="editorRef" :defaultConfig="toolbarConfig" :mode="mode" />
-      <Editor
-        v-model="valueHtml"
-        style="height: 500px; overflow-y: hidden"
-        :defaultConfig="editorConfig"
-        :mode="mode"
-        @on-created="btnFn.handleCreated"
-      />
+    <div
+      :class="[
+        'overflow-hidden border rounded-lg grow flex flex-col',
+        !isMobile ? '' : 'flex-col-reverse gap-2',
+      ]"
+    >
+      <template v-if="rerend">
+        <Toolbar
+          class="border-b"
+          :editor="editorRef"
+          :defaultConfig="!isMobile ? toolbarConfigDefault : toolbarConfigSimple"
+          :mode="!isMobile ? 'default' : 'simple'"
+        />
+        <Editor
+          v-model="valueHtml"
+          :defaultConfig="editorConfig"
+          :mode="!isMobile ? 'default' : 'simple'"
+          @on-created="btnFn.handleCreated"
+        />
+      </template>
     </div>
-    <div class="bg-white flex gap-2 p-3">
+    <div class="bg-white flex gap-2 p-2">
       <router-link :to="{ name: 'article' }">
         <a-button>返回</a-button>
       </router-link>
-      <a-button type="primary" @click="btnFn.save">保存</a-button>
+      <a-button type="primary" @click="btnFn.save">暂存</a-button>
+      <a-button type="primary" @click="btnFn.save">保存并返回</a-button>
     </div>
   </div>
 </template>
@@ -31,6 +43,7 @@
   import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
   import ArticleApi from '@/api/article';
   import { notification } from 'ant-design-vue';
+  import { useRouter } from 'vue-router';
 
   export default defineComponent({
     components: { Return, Editor, Toolbar },
@@ -44,12 +57,35 @@
         formState: {
           title: '' as string,
         },
+        isMobile: false,
+        rerend: true,
       });
 
+      const router = useRouter();
+
       const noState = {
-        toolbarConfig: {},
+        toolbarConfigSimple: {
+          excludeKeys: [
+            'bulletedList',
+            'numberedList',
+            'todo',
+            'insertTable',
+            'codeBlock',
+            'clearStyle',
+            'blockquote',
+            'header1',
+            'header2',
+            'header3',
+            'bold',
+            'underline',
+            'italic',
+            'through',
+            'color',
+            'bgColor',
+          ],
+        },
+        toolbarConfigDefault: {},
         editorConfig: '请输入内容...',
-        mode: 'simple',
       };
 
       // 组件销毁时，也及时销毁编辑器
@@ -57,6 +93,7 @@
         const editor = shallow.editorRef;
         if (editor == null) return;
         editor.destroy();
+        window.removeEventListener('resize', checkScreenSize);
       });
 
       const btnFn = {
@@ -64,15 +101,37 @@
           shallow.editorRef = editor; // 记录 editor 实例，重要！
         },
         save: () => {
-          shallow.formRef.validate().then(() => {
-            ArticleApi.add({ title: state.formState.title, content: shallow.editorRef.getHtml() })
-              .then(() => {
-                notification.success({ message: '保存成功' });
-              })
-              .catch(() => {});
+          return new Promise<void>((resolve) => {
+            shallow.formRef.validate().then(() => {
+              ArticleApi.add({ title: state.formState.title, content: shallow.editorRef.getHtml() })
+                .then(() => {
+                  notification.success({ message: '保存成功' });
+                  resolve();
+                })
+                .catch(() => {});
+            });
+          });
+        },
+        saveAndBack: () => {
+          btnFn.save().then(() => {
+            router.push({ name: 'article' });
           });
         },
       };
+
+      const checkScreenSize = () => {
+        if (state.isMobile === window.innerWidth < 640) return;
+
+        state.isMobile = window.innerWidth < 640;
+        state.rerend = false;
+        nextTick(() => {
+          state.rerend = true;
+        });
+      };
+
+      onMounted(() => {
+        window.addEventListener('resize', checkScreenSize);
+      });
 
       return {
         ...toRefs(shallow),
@@ -83,4 +142,8 @@
     },
   });
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+  .ant-form-item {
+    margin-bottom: 0;
+  }
+</style>
