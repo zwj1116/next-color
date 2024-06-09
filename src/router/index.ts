@@ -10,7 +10,7 @@ import { isPro } from '@/utils/env';
 import { App } from 'vue';
 
 const router: Router = createRouter({
-  history: isPro ? createWebHistory('/screen/') : createWebHashHistory(),
+  history: isPro ? createWebHistory('/') : createWebHashHistory(),
   routes: allRoutes as unknown as RouteRecordRaw[],
   strict: true,
   scrollBehavior: () => ({ left: 0, top: 0 }),

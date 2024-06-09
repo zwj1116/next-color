@@ -1,14 +1,8 @@
 {
-  "name": "vue3-ts-screen-demo",
-  "version": "1.9.0",
-  "description": "使用vue3.0 + typescript + ant-design-vue3.0 搭建的项目基础架构类型声明库",
-  "author": {
-    "name": "zhangshenshen",
-    "email": "zhangshenshen@cethik.com"
-  },
+  "name": "zwj-color",
   "scripts": {
     "serve": "cross-env NODE_ENV=development webpack-dev-server -c build/webpack.dev.js  --progress --color",
-    "build": "cross-env NODE_ENV=production ASSET_PATH=screen webpack -c build/webpack.prod.js --progress --color",
+    "build": "cross-env NODE_ENV=production ASSET_PATH=dist webpack -c build/webpack.prod.js --progress --color",
     "analy": "cross-env NODE_ENV=production webpack -c build/webpack.analy.js",
     "delete": "rimraf node_modules",
     "lint:eslint": "eslint \"{src,mock}/**/*.{vue,js,ts,tsx}\" --fix",

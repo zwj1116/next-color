@@ -22,7 +22,7 @@ module.exports = merge(baseConfig, {
     path: resolve(`../${ASSET_PATH}`),
     filename: `static/js/[name].${timestamp}.js`,
     clean: true,// 在生成文件之前清空 output 目录
-    publicPath: `/${ASSET_PATH}/`,
+    publicPath: `/`,
   },
   plugins: [
     new MiniCssExtractPlugin({
