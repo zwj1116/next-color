@@ -1,6 +1,6 @@
 <template>
-  <router-link v-if="!isTitle" :to="{ name, query }" class="flex gap-2 items-center text-lg">
-    <svg-icon icon-class="arrow-loeft"></svg-icon>
+  <router-link v-if="!isTitle" :to="{ name, query }" class="flex gap-2 items-center text-lg w-max">
+    <svg-icon icon-class="arrow-left"></svg-icon>
     <span>{{ message }}</span>
   </router-link>
   <div v-else class="flex gap-2 items-center text-lg">

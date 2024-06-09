@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-3">
+  <div class="flex flex-col gap-3 h-full">
     <Return :isTitle="true" message="文章列表"></Return>
     <div class="flex gap-2 justify-end">
       <a-button type="primary">搜索</a-button>
