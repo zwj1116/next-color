@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-3 h-full">
-    <Return name="artilce" message="文章查看"></Return>
+    <Return name="article" message="文章查看"></Return>
   </div>
 </template>
 <script lang="ts">

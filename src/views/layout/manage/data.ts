@@ -1,15 +1,17 @@
-import { UserOutlined } from '@ant-design/icons-vue';
+import { SvgIcon } from '@/components/Svgicon';
+import { SettingOutlined } from '@ant-design/icons-vue';
 
 const menus = [
   {
-    label: '系统',
-    key: 'system',
-    icon: null,
+    label: '系统管理',
+    key: 'manage',
+    icon: () => h(SettingOutlined),
     children: [
       {
-        label: '用户',
-        key: 'user',
-        icon: () => h(UserOutlined),
+        label: '文章管理',
+        key: 'article',
+        // icon: () => h(UserOutlined),
+        icon: () => h(SvgIcon, { iconClass: 'newspaper' }),
       },
     ],
     // type: 'group',

@@ -3,7 +3,7 @@
     <Return :isTitle="true" message="文章列表"></Return>
     <div class="flex gap-2 justify-end">
       <a-button type="primary" @click="btnFn.refresh">搜索</a-button>
-      <router-link :to="{ name: 'opAartilce' }">
+      <router-link :to="{ name: 'opArticle' }">
         <a-button>添加</a-button>
       </router-link>
     </div>
@@ -11,11 +11,11 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex === 'action'">
           <div class="flex gap-2 items-center">
-            <router-link :to="{ name: 'detailArtilce' }">
+            <router-link :to="{ name: 'detailarticle' }">
               <a>详情</a>
             </router-link>
             <a-divider type="vertical" />
-            <router-link :to="{ name: 'opAartilce' }">
+            <router-link :to="{ name: 'opArticle' }">
               <a>编辑</a>
             </router-link>
             <a-divider type="vertical" />

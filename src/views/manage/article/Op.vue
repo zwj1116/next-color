@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-3 h-full">
-    <Return name="artilce" message="文章操作"></Return>
+    <Return name="article" message="文章操作"></Return>
     <a-form ref="formRef" :model="formState">
       <a-form-item label="标题" name="title" :rules="[{ required: true, message: '请输入标题' }]">
         <a-input v-model:value="formState.title" />
@@ -17,7 +17,7 @@
       />
     </div>
     <div class="bg-white flex gap-2 p-3">
-      <router-link :to="{ name: 'artilce' }">
+      <router-link :to="{ name: 'article' }">
         <a-button>返回</a-button>
       </router-link>
       <a-button type="primary" @click="btnFn.save">保存</a-button>
@@ -49,7 +49,7 @@
       const noState = {
         toolbarConfig: {},
         editorConfig: '请输入内容...',
-        mode: 'default',
+        mode: 'simple',
       };
 
       // 组件销毁时，也及时销毁编辑器
