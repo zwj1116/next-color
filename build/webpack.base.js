@@ -94,7 +94,7 @@ module.exports = {
       {
         test:  /\.css$/,
         // 执行顺序是从右到左
-        use: [ isDev ? 'style-loader' : MiniCssExtractPlugin.loader,'css-loader'],
+        use: [ isDev ? 'style-loader' : MiniCssExtractPlugin.loader,'css-loader', 'postcss-loader'],
       },
       {
         test: /\.less$/,

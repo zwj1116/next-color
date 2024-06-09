@@ -5,6 +5,7 @@ import { setupRouterGuard } from '@/router/guard';
 import { setupStore } from '@/store';
 import { loadAllPlugins } from '@/plugins';
 import { loadAllDirective } from '@/directive';
+import 'tailwindcss/tailwind.css';
 
 (async () => {
   const app: ReturnType<typeof createApp> = createApp(App);
