@@ -1,12 +1,18 @@
 <template>
-  <a-layout-sider width="200" breakpoint="lg" collapsed-width="0">
+  <a-layout-sider
+    width="180"
+    breakpoint="sm"
+    collapsed-width="0"
+    class="h-full"
+    :style="{ position: isMobile ? 'fixed !important' : '' }"
+  >
     <a-menu
       v-model:selectedKeys="selectedKeys"
       v-model:openKeys="openKey"
       mode="inline"
       theme="dark"
       :items="menus"
-      :style="{ height: '100%', borderRight: 0 }"
+      class="h-full border-r-0"
     >
     </a-menu>
   </a-layout-sider>
@@ -15,6 +21,7 @@
   import { defineComponent } from 'vue';
   import menus from './data';
   import { useRoute } from 'vue-router';
+  import { useBasicStore } from '@/store/modules/basic';
 
   export default defineComponent({
     setup() {
@@ -23,6 +30,7 @@
         openKey: [],
       });
       const route = useRoute();
+      const isMobile = computed(() => useBasicStore().isMobile);
       watch(
         () => route,
         (val: any) => {
@@ -35,6 +43,7 @@
       return {
         ...toRefs(state),
         menus,
+        isMobile,
       };
     },
   });

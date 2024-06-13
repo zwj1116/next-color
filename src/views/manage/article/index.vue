@@ -1,6 +1,5 @@
 <template>
-  <div class="flex flex-col gap-3 h-full">
-    <Return :isTitle="true" message="文章列表"></Return>
+  <div class="flex flex-col gap-3 overflow-auto">
     <div class="flex gap-2 justify-end">
       <a-button type="primary" @click="btnFn.refresh">搜索</a-button>
       <router-link :to="{ name: 'opArticle' }">
@@ -10,7 +9,7 @@
     <ResonsiveTable ref="tableRef" :columns="columns" :api="ArticleApi.page">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex === 'action'">
-          <div class="flex gap-2 items-center">
+          <div class="flex items-center">
             <router-link :to="{ name: 'detailarticle' }">
               <a>详情</a>
             </router-link>
@@ -28,14 +27,13 @@
 </template>
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import Return from '@/components/Return/index.vue';
   import ResonsiveTable from '@/components/ResponsiveTable/index.vue';
   import ArticleApi from '@/api/article';
   import { columns } from './config';
   import { Modal, notification } from 'ant-design-vue';
 
   export default defineComponent({
-    components: { Return, ResonsiveTable },
+    components: { ResonsiveTable },
     setup() {
       const shallow = shallowReactive({
         tableRef: null as any,

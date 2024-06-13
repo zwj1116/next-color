@@ -1,4 +1,5 @@
 import type { App, Plugin } from 'vue';
+import { useBasicStore } from '@/store/modules/basic';
 
 export function isNotEmpty(obj: any): boolean {
   return obj !== '' && obj != null;
@@ -42,4 +43,9 @@ export const compare = (key: any, desc: any) => {
       return value2 - value1;
     }
   };
+};
+export const checkScreenSize = () => {
+  window.addEventListener('resize', () => {
+    useBasicStore().setIsMobile(window.innerWidth < 640);
+  });
 };

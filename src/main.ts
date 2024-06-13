@@ -6,6 +6,7 @@ import { setupStore } from '@/store';
 import { loadAllPlugins } from '@/plugins';
 import { loadAllDirective } from '@/directive';
 import 'tailwindcss/tailwind.css';
+import { checkScreenSize } from './utils/funs';
 
 (async () => {
   const app: ReturnType<typeof createApp> = createApp(App);
@@ -21,6 +22,8 @@ import 'tailwindcss/tailwind.css';
   loadAllDirective(app);
 
   await Promise.all([router.isReady()]);
+
+  checkScreenSize();
 
   app.mount('#app', true);
 })();

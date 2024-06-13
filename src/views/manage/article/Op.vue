@@ -1,6 +1,5 @@
 <template>
   <div class="flex flex-col gap-3 h-full">
-    <Return name="article" message="文章操作"></Return>
     <a-form ref="formRef" :model="formState">
       <a-form-item label="标题" name="title" :rules="[{ required: true, message: '请输入标题' }]">
         <a-input v-model:value="formState.title" />
@@ -38,15 +37,15 @@
 </template>
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import Return from '@/components/Return/index.vue';
   import '@wangeditor/editor/dist/css/style.css'; // 引入 css
   import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
   import ArticleApi from '@/api/article';
   import { notification } from 'ant-design-vue';
   import { useRouter } from 'vue-router';
+  import { useBasicStore } from '@/store/modules/basic';
 
   export default defineComponent({
-    components: { Return, Editor, Toolbar },
+    components: { Editor, Toolbar },
     setup() {
       const shallow = shallowReactive({
         editorRef: null as any,
@@ -57,9 +56,10 @@
         formState: {
           title: '' as string,
         },
-        isMobile: false,
         rerend: true,
       });
+
+      const isMobile = computed(() => useBasicStore().isMobile);
 
       const router = useRouter();
 
@@ -82,6 +82,7 @@
             'through',
             'color',
             'bgColor',
+            'insertLink',
           ],
         },
         toolbarConfigDefault: {},
@@ -93,7 +94,6 @@
         const editor = shallow.editorRef;
         if (editor == null) return;
         editor.destroy();
-        window.removeEventListener('resize', checkScreenSize);
       });
 
       const btnFn = {
@@ -119,18 +119,11 @@
         },
       };
 
-      const checkScreenSize = () => {
-        if (state.isMobile === window.innerWidth < 640) return;
-
-        state.isMobile = window.innerWidth < 640;
+      watch(isMobile, () => {
         state.rerend = false;
         nextTick(() => {
           state.rerend = true;
         });
-      };
-
-      onMounted(() => {
-        window.addEventListener('resize', checkScreenSize);
       });
 
       return {
@@ -138,6 +131,7 @@
         ...toRefs(state),
         ...noState,
         btnFn,
+        isMobile,
       };
     },
   });
