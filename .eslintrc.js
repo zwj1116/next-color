@@ -43,5 +43,6 @@ module.exports = {
         allowedNames: ['self', 'pc', 'token'], // Allow `const self = this`; `[]` by default
       },
     ],
+    'vue/no-v-model-argument': 'off',
   },
 };

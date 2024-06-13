@@ -18,6 +18,8 @@ import {
   Form,
   Table,
   Divider,
+  Switch,
+  Card,
 } from 'ant-design-vue';
 
 const components = [
@@ -38,6 +40,8 @@ const components = [
   Form,
   Table,
   Divider,
+  Switch,
+  Card,
 ];
 
 export default function setupAntd(app: App<Element>) {

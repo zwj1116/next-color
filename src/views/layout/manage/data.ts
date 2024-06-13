@@ -13,6 +13,12 @@ const menus = [
         // icon: () => h(UserOutlined),
         icon: () => h(SvgIcon, { iconClass: 'newspaper' }),
       },
+      {
+        label: '颜色管理',
+        key: 'color',
+        // icon: () => h(UserOutlined),
+        icon: () => h(SvgIcon, { iconClass: 'droplet' }),
+      },
     ],
     // type: 'group',
   },

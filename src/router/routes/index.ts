@@ -35,6 +35,24 @@ export const allRoutes = [
   //   ],
   // },
   {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/login/index.vue'),
+    meta: {
+      title: '登录',
+      keepAlive: true,
+    },
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import('@/views/login/Register.vue'),
+    meta: {
+      title: '注册',
+      keepAlive: true,
+    },
+  },
+  {
     path: '/manage',
     name: 'manage',
     component: () => import('@/views/layout/ManageLayout.vue'),
@@ -74,6 +92,39 @@ export const allRoutes = [
           title: '文章详情',
           parentPath: 'manage',
           menuPath: 'article',
+          keepAlive: true,
+        },
+      },
+      {
+        path: 'color',
+        name: 'color',
+        component: () => import('@/views/manage/color/index.vue'),
+        meta: {
+          title: '颜色列表',
+          parentPath: 'manage',
+          menuPath: 'color',
+          keepAlive: true,
+        },
+      },
+      {
+        path: 'opColor',
+        name: 'opColor',
+        component: () => import('@/views/manage/color/Op.vue'),
+        meta: {
+          title: '文章操作',
+          parentPath: 'manage',
+          menuPath: 'color',
+          keepAlive: true,
+        },
+      },
+      {
+        path: 'detailColor',
+        name: 'detailColor',
+        component: () => import('@/views/manage/color/Detail.vue'),
+        meta: {
+          title: '文章详情',
+          parentPath: 'manage',
+          menuPath: 'color',
           keepAlive: true,
         },
       },

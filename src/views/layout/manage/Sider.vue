@@ -7,22 +7,31 @@
       theme="dark"
       :items="menus"
       :style="{ height: '100%', borderRight: 0 }"
+      @select="btnFn.select"
     >
     </a-menu>
   </a-layout-sider>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { defineComponent, reactive, toRefs, watch } from 'vue';
   import menus from './data';
-  import { useRoute } from 'vue-router';
+  import { useRoute, useRouter } from 'vue-router';
 
   export default defineComponent({
     setup() {
       const state = reactive({
-        selectedKeys: [],
-        openKey: [],
+        selectedKeys: [] as any,
+        openKey: [] as any,
       });
       const route = useRoute();
+      const router = useRouter();
+
+      const btnFn = {
+        select: (e: any) => {
+          router.push({ name: e.key });
+        },
+      };
+
       watch(
         () => route,
         (val: any) => {
@@ -35,6 +44,7 @@
       return {
         ...toRefs(state),
         menus,
+        btnFn,
       };
     },
   });
