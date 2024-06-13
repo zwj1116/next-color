@@ -16,7 +16,8 @@ module.exports = merge(baseConfig, {
     },
     proxy: {
       '/yk': {
-        target: 'http://47.116.221.59:9999',
+        // target: 'http://47.116.221.59:9999',
+        target: 'http://127.0.0.1:9999',
         ws: true,
         changeOrigin: true,
         logLevel: 'debug',

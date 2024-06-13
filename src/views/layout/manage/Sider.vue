@@ -13,24 +13,33 @@
       theme="dark"
       :items="menus"
       class="h-full border-r-0"
+      @select="btnFn.select"
     >
     </a-menu>
   </a-layout-sider>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { computed, defineComponent, reactive, toRefs, watch } from 'vue';
   import menus from './data';
-  import { useRoute } from 'vue-router';
+  import { useRoute, useRouter } from 'vue-router';
   import { useBasicStore } from '@/store/modules/basic';
 
   export default defineComponent({
     setup() {
       const state = reactive({
-        selectedKeys: [],
-        openKey: [],
+        selectedKeys: [] as any,
+        openKey: [] as any,
       });
       const route = useRoute();
       const isMobile = computed(() => useBasicStore().isMobile);
+      const router = useRouter();
+
+      const btnFn = {
+        select: (e: any) => {
+          router.push({ name: e.key });
+        },
+      };
+
       watch(
         () => route,
         (val: any) => {
@@ -44,6 +53,7 @@
         ...toRefs(state),
         menus,
         isMobile,
+        btnFn,
       };
     },
   });

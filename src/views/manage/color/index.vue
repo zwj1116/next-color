@@ -1,20 +1,21 @@
 <template>
-  <div class="flex flex-col gap-3 overflow-auto">
+  <div class="flex flex-col gap-3 h-full">
+    <Return :isTitle="true" message="文章列表"></Return>
     <div class="flex gap-2 justify-end">
       <a-button type="primary" @click="btnFn.refresh">搜索</a-button>
-      <router-link :to="{ name: 'opArticle' }">
+      <router-link :to="{ name: 'opColor' }">
         <a-button>添加</a-button>
       </router-link>
     </div>
-    <ResonsiveTable ref="tableRef" :columns="columns" :api="ArticleApi.page">
+    <ResonsiveTable ref="tableRef" :columns="columns" :api="ColorApi.page">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex === 'action'">
-          <div class="flex items-center">
-            <router-link :to="{ name: 'detailarticle' }">
+          <div class="flex gap-2 items-center">
+            <router-link :to="{ name: 'detailColor' }">
               <a>详情</a>
             </router-link>
             <a-divider type="vertical" />
-            <router-link :to="{ name: 'opArticle' }">
+            <router-link :to="{ name: 'opColor' }">
               <a>编辑</a>
             </router-link>
             <a-divider type="vertical" />
@@ -26,9 +27,9 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { defineComponent, shallowReactive, toRefs } from 'vue';
   import ResonsiveTable from '@/components/ResponsiveTable/index.vue';
-  import ArticleApi from '@/api/article';
+  import ColorApi from '@/api/color';
   import { columns } from './config';
   import { Modal, notification } from 'ant-design-vue';
 
@@ -48,7 +49,7 @@
             content: `确定删除【${record.title}吗？】`,
             async onOk() {
               return await new Promise<void>((resolve, reject) => {
-                ArticleApi.del(record.id)
+                ColorApi.del(record.id)
                   .then(() => {
                     notification.success({ message: '删除成功！' });
                     btnFn.refresh();
@@ -64,7 +65,7 @@
         },
       };
       return {
-        ArticleApi,
+        ColorApi,
         columns,
         btnFn,
         ...toRefs(shallow),
