@@ -102,4 +102,9 @@
     },
   });
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+  .ant-input,
+  .ant-input-password {
+    height: 40px;
+  }
+</style>

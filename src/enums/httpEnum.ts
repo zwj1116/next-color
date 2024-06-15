@@ -28,6 +28,7 @@ export enum ContentTypeEnum {
   FORM_URLENCODED = 'application/x-www-form-urlencoded;charset=UTF-8',
   // form-data  upload
   FORM_DATA = 'multipart/form-data;charset=UTF-8',
+  FILE = 'multipart/form-data; boundary=----WebKitFormBoundaryin0VvtSZR94KSHZb',
 }
 
 export const TIME_OUT = 'timeout';

@@ -20,6 +20,7 @@ import {
   Divider,
   Switch,
   Card,
+  Upload,
 } from 'ant-design-vue';
 
 const components = [
@@ -42,6 +43,7 @@ const components = [
   Divider,
   Switch,
   Card,
+  Upload,
 ];
 
 export default function setupAntd(app: App<Element>) {
