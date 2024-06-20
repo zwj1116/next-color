@@ -26,6 +26,7 @@
   import { useVModel } from '@vueuse/core';
   import UploadApi from '@/api/upload';
   import { MINIO } from '@/config';
+  import { reactive, toRefs } from 'vue';
 
   const getBase64 = (file: File) => {
     return new Promise((resolve, reject) => {
@@ -81,21 +82,27 @@
               _file.status = 'done';
               _file.percent = 100;
               _file.url = res.url;
+              fileListCopy.value = state.customfileList.map((e: any) => e.url);
             })
-            .catch(() => {});
+            .catch(() => {
+              const index = state.customfileList.findIndex((e: any) => e.uid === file.uid);
+              state.customfileList.splice(index, 1);
+              fileListCopy.value = state.customfileList.map((e: any) => e.url);
+            });
         },
         remove: (file: any) => {
           if (!file.url) return;
 
           UploadApi.del({ url: file.url.split('/image/')[1] })
-            .then(() => {})
+            .then(() => {
+              fileListCopy.value = state.customfileList.map((e: any) => e.url);
+            })
             .catch(() => {});
         },
       };
       return {
         ...toRefs(state),
         fileFn,
-        fileListCopy,
       };
     },
   });

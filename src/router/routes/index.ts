@@ -11,29 +11,34 @@ files.keys().forEach((key) => {
 export const allRoutes = [
   {
     path: '/',
-    redirect: '/manage',
+    name: 'blog',
+    component: () => import('@/views/layout/BlogLayout.vue'),
+    redirect: '/vArticle',
+    meta: {
+      title: '主页',
+      keepAlive: true,
+    },
+    children: [
+      {
+        path: 'vArticle',
+        name: 'vArticle',
+        component: () => import('@/views/blog/article/index.vue'),
+        meta: {
+          title: '概览',
+          keepAlive: true,
+        },
+      },
+      {
+        path: 'vColor',
+        name: 'vColor',
+        component: () => import('@/views/blog/color/index.vue'),
+        meta: {
+          title: '概览',
+          keepAlive: true,
+        },
+      },
+    ],
   },
-  // {
-  //   path: '/index',
-  //   name: 'index',
-  //   component: () => import('@/views/home/index.vue'),
-  //   redirect: '/index/overview',
-  //   meta: {
-  //     title: '主页',
-  //     keepAlive: true,
-  //   },
-  //   children: [
-  //     {
-  //       path: 'overview',
-  //       name: 'overview',
-  //       components: () => import('@/views/overview/left/index.vue'),
-  //       meta: {
-  //         title: '概览',
-  //         keepAlive: true,
-  //       },
-  //     },
-  //   ],
-  // },
   {
     path: '/login',
     name: 'login',
