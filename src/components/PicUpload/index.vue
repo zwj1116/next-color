@@ -81,6 +81,7 @@
               _file.status = 'done';
               _file.percent = 100;
               _file.url = res.url;
+              fileListCopy.value.push(res.url);
             })
             .catch(() => {});
         },
@@ -88,7 +89,12 @@
           if (!file.url) return;
 
           UploadApi.del({ url: file.url.split('/image/')[1] })
-            .then(() => {})
+            .then(() => {
+              const index = fileListCopy.value.findIndex((e: any) => file.url === e.url);
+              if (index >= 0) {
+                fileListCopy.value.splice(index, 1);
+              }
+            })
             .catch(() => {});
         },
       };

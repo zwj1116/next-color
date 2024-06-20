@@ -4,9 +4,19 @@
       <div class="flex flex-col gap-2 h-full">
         <div class="">
           <a-card size="small">
-            <a-form-item label="色号" name="rgb" :rules="{ required: true, message: '请输入色号' }">
-              <a-input v-model:value="formState.rgb" placeholder="请输入色号" />
-            </a-form-item>
+            <div class="flex gap-2">
+              <a-form-item
+                label="名称"
+                name="name"
+                class="grow"
+                :rules="{ required: true, message: '请输入名称' }"
+              >
+                <a-input v-model:value="formState.name" placeholder="请输入名称" />
+              </a-form-item>
+              <a-form-item label="色号" name="rgb" class="grow">
+                <a-input v-model:value="formState.rgb" placeholder="请输入色号" />
+              </a-form-item>
+            </div>
             <a-form-item label="介绍" name="abstract">
               <a-textarea v-model:value="formState.abstract" placeholder="请输入介绍" autoSize />
             </a-form-item>
@@ -27,7 +37,11 @@
               :title="`词条 ${index + 1}`"
             >
               <template #extra>
-                <svg-icon icon-class="trash" @click="btnFn.removeUser(item)" />
+                <svg-icon
+                  icon-class="trash"
+                  class="cursor-pointer"
+                  @click="btnFn.removeUser(item)"
+                />
               </template>
               <div class="flex gap-2">
                 <a-form-item :name="['items', index, 'name']" label="名称" class="w-1/2">
@@ -60,16 +74,16 @@
       </div>
     </a-form>
     <div class="bg-white flex gap-2 p-2">
-      <router-link :to="{ name: 'article' }">
-        <a-button>返回</a-button>
-      </router-link>
-      <a-button type="primary" @click="btnFn.save">暂存</a-button>
       <a-button type="primary" @click="btnFn.addUser">
         <div class="flex gap-2 justify-center items-center">
           <svg-icon icon-class="plus" />
           新增
         </div>
       </a-button>
+      <router-link :to="{ name: 'color' }">
+        <a-button>返回</a-button>
+      </router-link>
+      <a-button type="primary" @click="btnFn.save">保存</a-button>
     </div>
   </div>
 </template>
@@ -84,7 +98,7 @@
         formRef: null as any,
       });
       const state = reactive({
-        formState: { rgb: null, abstract: null, livePic: null, items: [] } as any,
+        formState: { rgb: null, abstract: null, livePic: null, name: null, items: [] } as any,
       });
       const btnFn = {
         addUser: () => {
@@ -104,7 +118,9 @@
             state.formState.items.splice(index, 1);
           }
         },
-        save: () => {},
+        save: () => {
+          shallow.formRef.validate().then(() => {});
+        },
       };
       return {
         btnFn,
