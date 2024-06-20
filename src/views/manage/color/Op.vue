@@ -21,7 +21,7 @@
               <a-textarea v-model:value="formState.abstract" placeholder="请输入介绍" autoSize />
             </a-form-item>
             <a-form-item label="图片" name="livePic">
-              <PicUpload v-model:value="formState.livePic" />
+              <PicUpload v-model:fileList="formState.livePic" />
             </a-form-item>
           </a-card>
         </div>
@@ -88,29 +88,29 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, reactive, shallowReactive, toRefs } from 'vue';
+  import { defineComponent, reactive, toRefs } from 'vue';
   import PicUpload from '@/components/PicUpload/index.vue';
+
+  const defaultItem = {
+    name: null,
+    author: null,
+    time: null,
+    origin: null,
+    originPic: null,
+    link: null,
+    isFirst: null,
+  };
 
   export default defineComponent({
     components: { PicUpload },
     setup() {
-      const shallow = shallowReactive({
-        formRef: null as any,
-      });
       const state = reactive({
-        formState: { rgb: null, abstract: null, livePic: null, name: null, items: [] } as any,
+        formRef: null as any,
+        formState: { rgb: null, abstract: null, livePic: null, items: [] } as any,
       });
       const btnFn = {
         addUser: () => {
-          state.formState.items.push({
-            name: null,
-            author: null,
-            time: null,
-            origin: null,
-            originPic: null,
-            link: null,
-            isFirst: null,
-          });
+          state.formState.items.push(JSON.parse(JSON.stringify(defaultItem)));
         },
         removeUser: (item: any) => {
           const index = state.formState.items.indexOf(item);
@@ -119,13 +119,14 @@
           }
         },
         save: () => {
-          shallow.formRef.validate().then(() => {});
+          state.formRef.validate().then(() => {
+            console.log(state.formState);
+          });
         },
       };
       return {
         btnFn,
         ...toRefs(state),
-        ...toRefs(shallow),
       };
     },
   });
