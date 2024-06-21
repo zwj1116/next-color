@@ -21,7 +21,7 @@
               <a-textarea v-model:value="formState.abstract" placeholder="请输入介绍" autoSize />
             </a-form-item>
             <a-form-item label="图片" name="livePic">
-              <PicUpload v-model:fileList="formState.livePic" />
+              <PicUpload :fileList="formState.livePic" />
             </a-form-item>
           </a-card>
         </div>
@@ -66,7 +66,7 @@
                 <a-input v-model:value="item.link" placeholder="请输入链接" />
               </a-form-item>
               <a-form-item :name="['items', index, 'originPic']" label="图片">
-                <a-input v-model:value="item.originPic" placeholder="图片" />
+                <PicUpload :fileList="item.originPic" />
               </a-form-item>
             </a-card>
           </div>
@@ -83,20 +83,25 @@
       <router-link :to="{ name: 'color' }">
         <a-button>返回</a-button>
       </router-link>
+      <a-button type="primary" @click="btnFn.save">暂存</a-button>
       <a-button type="primary" @click="btnFn.save">保存</a-button>
     </div>
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, reactive, toRefs } from 'vue';
+  import { defineComponent, onMounted, reactive, toRefs } from 'vue';
   import PicUpload from '@/components/PicUpload/index.vue';
+  import ColorApi from '@/api/color';
+  import { notification } from 'ant-design-vue';
+  import { useRoute } from 'vue-router';
+  import UploadApi from '@/api/upload';
 
   const defaultItem = {
     name: null,
     author: null,
     time: null,
     origin: null,
-    originPic: null,
+    originPic: [],
     link: null,
     isFirst: null,
   };
@@ -104,9 +109,13 @@
   export default defineComponent({
     components: { PicUpload },
     setup() {
+      const route = useRoute();
+      const noState = {
+        isEdit: false,
+      };
       const state = reactive({
         formRef: null as any,
-        formState: { rgb: null, abstract: null, livePic: null, items: [] } as any,
+        formState: { name: null, rgb: null, abstract: null, livePic: [], items: [] } as any,
       });
       const btnFn = {
         addUser: () => {
@@ -115,15 +124,44 @@
         removeUser: (item: any) => {
           const index = state.formState.items.indexOf(item);
           if (index !== -1) {
-            state.formState.items.splice(index, 1);
+            Promise.all(
+              item.originPic.map((e: any) => {
+                UploadApi.del({ url: e.split('/image/')[1] });
+              })
+            )
+              .then(() => {
+                state.formState.items.splice(index, 1);
+              })
+              .catch(() => {});
           }
         },
         save: () => {
           state.formRef.validate().then(() => {
-            console.log(state.formState);
+            const data = JSON.parse(JSON.stringify(state.formState));
+            data.livePic = JSON.stringify(data.livePic);
+            data.items.forEach((e: any) => (e.originPic = JSON.stringify(e.originPic)));
+            data.items = JSON.stringify(data.items);
+            ColorApi[noState.isEdit ? 'update' : 'add'](data)
+              .then(() => {
+                notification.success({ message: '保存成功' });
+              })
+              .catch(() => {});
           });
         },
       };
+      const dataFn = {
+        init: () => {
+          noState.isEdit = !!route.query?.id;
+          if (noState.isEdit) {
+            ColorApi.pfDetail({ id: route.query?.id })
+              .then((res) => {
+                state.formState = res;
+              })
+              .catch(() => {});
+          }
+        },
+      };
+      onMounted(() => dataFn.init());
       return {
         btnFn,
         ...toRefs(state),

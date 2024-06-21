@@ -21,6 +21,7 @@ import {
   Switch,
   Card,
   Upload,
+  Image,
 } from 'ant-design-vue';
 
 const components = [
@@ -44,6 +45,7 @@ const components = [
   Switch,
   Card,
   Upload,
+  Image,
 ];
 
 export default function setupAntd(app: App<Element>) {

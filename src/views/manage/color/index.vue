@@ -11,11 +11,11 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex === 'action'">
           <div class="flex gap-2 items-center">
-            <router-link :to="{ name: 'detailColor' }">
+            <router-link :to="{ name: 'detailColor', query: { id: record.id } }">
               <a>详情</a>
             </router-link>
             <a-divider type="vertical" />
-            <router-link :to="{ name: 'opColor' }">
+            <router-link :to="{ name: 'opColor', query: { id: record.id } }">
               <a>编辑</a>
             </router-link>
             <a-divider type="vertical" />
@@ -46,10 +46,10 @@
         del: (record: any) => {
           Modal.confirm({
             title: '提示',
-            content: `确定删除【${record.title}吗？】`,
+            content: `确定删除【${record.name}吗？】`,
             async onOk() {
               return await new Promise<void>((resolve, reject) => {
-                ColorApi.del(record.id)
+                ColorApi.del({ id: record.id })
                   .then(() => {
                     notification.success({ message: '删除成功！' });
                     btnFn.refresh();

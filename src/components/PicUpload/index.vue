@@ -26,7 +26,7 @@
   import { useVModel } from '@vueuse/core';
   import UploadApi from '@/api/upload';
   import { MINIO } from '@/config';
-  import { reactive, toRefs } from 'vue';
+  import { reactive, toRefs, watch } from 'vue';
 
   const getBase64 = (file: File) => {
     return new Promise((resolve, reject) => {
@@ -38,6 +38,7 @@
   };
 
   export default defineComponent({
+    name: 'PicUplaod',
     components: { PlusOutlined },
     props: {
       fileList: {
@@ -62,7 +63,9 @@
           if (!file.url && !file.preview) {
             file.preview = (await getBase64(file.originFileObj)) as string;
           }
-          state.previewImage = `${MINIO}${file.url}` || file.preview;
+          state.previewImage = file.url.startsWith(MINIO)
+            ? file.url
+            : `${MINIO}${file.url}` || file.preview;
           state.previewVisible = true;
         },
         beforeUpload: (file: File) => {
@@ -81,13 +84,13 @@
               const _file = state.customfileList.find((e: any) => e.uid === file.uid);
               _file.status = 'done';
               _file.percent = 100;
-              _file.url = res.url;
-              fileListCopy.value = state.customfileList.map((e: any) => e.url);
+              _file.url = `${res.url}`;
+              fileFn.changeData();
             })
             .catch(() => {
               const index = state.customfileList.findIndex((e: any) => e.uid === file.uid);
               state.customfileList.splice(index, 1);
-              fileListCopy.value = state.customfileList.map((e: any) => e.url);
+              fileFn.changeData();
             });
         },
         remove: (file: any) => {
@@ -95,11 +98,31 @@
 
           UploadApi.del({ url: file.url.split('/image/')[1] })
             .then(() => {
-              fileListCopy.value = state.customfileList.map((e: any) => e.url);
+              fileFn.changeData();
             })
             .catch(() => {});
         },
+        changeData: () => {
+          fileListCopy.value.length = 0;
+          fileListCopy.value.push(
+            ...state.customfileList.map((e: any) => {
+              return e.url.startsWith(MINIO) ? e.url.replace(MINIO, '') : e.url;
+            })
+          );
+        },
       };
+      watch(
+        () => props.fileList,
+        () => {
+          state.customfileList = props.fileList.map((e: any) => {
+            return {
+              url: `${MINIO}${e}`,
+              status: 'done',
+            };
+          });
+        },
+        { immediate: true }
+      );
       return {
         ...toRefs(state),
         fileFn,

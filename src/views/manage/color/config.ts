@@ -1,17 +1,17 @@
 export const columns = [
   {
-    title: '标题',
-    dataIndex: 'title',
+    title: '名称',
+    dataIndex: 'name',
     ellipsis: true,
   },
   {
-    title: '内容',
-    dataIndex: 'content',
+    title: '色号',
+    dataIndex: 'rgb',
     ellipsis: true,
   },
   {
-    title: '访问量',
-    dataIndex: 'look',
+    title: '摘要',
+    dataIndex: 'abstract',
     ellipsis: true,
   },
   {
