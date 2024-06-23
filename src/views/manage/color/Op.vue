@@ -65,6 +65,9 @@
               <a-form-item :name="['items', index, 'link']" label="链接">
                 <a-input v-model:value="item.link" placeholder="请输入链接" />
               </a-form-item>
+              <a-form-item :name="['items', index, 'desc']" label="备注">
+                <a-input v-model:value="item.desc" placeholder="请输入备注" />
+              </a-form-item>
               <a-form-item :name="['items', index, 'originPic']" label="图片">
                 <PicUpload :fileList="item.originPic" />
               </a-form-item>
@@ -83,7 +86,7 @@
       <router-link :to="{ name: 'color' }">
         <a-button>返回</a-button>
       </router-link>
-      <a-button type="primary" @click="btnFn.save">暂存</a-button>
+      <a-button type="primary" @click="btnFn.save(false)">暂存</a-button>
       <a-button type="primary" @click="btnFn.save(true)">保存</a-button>
     </div>
   </div>
@@ -104,6 +107,7 @@
     originPic: [],
     link: null,
     isFirst: null,
+    desc: null,
   };
 
   export default defineComponent({

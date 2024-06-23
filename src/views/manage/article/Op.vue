@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-3 h-full">
-    <a-form ref="formRef" :model="formState">
+    <a-form ref="formRef" :model="formState" class="flex flex-col gap-2">
       <a-form-item label="标题" name="title" :rules="[{ required: true, message: '请输入标题' }]">
         <a-input v-model:value="formState.title" />
       </a-form-item>
@@ -33,8 +33,8 @@
       <router-link :to="{ name: 'article' }">
         <a-button>返回</a-button>
       </router-link>
-      <a-button type="primary" @click="btnFn.save">暂存</a-button>
-      <a-button type="primary" @click="btnFn.save">保存并返回</a-button>
+      <a-button type="primary" @click="btnFn.save(false)">暂存</a-button>
+      <a-button type="primary" @click="btnFn.save(true)">保存并返回</a-button>
     </div>
   </div>
 </template>
@@ -66,9 +66,11 @@
 
       const isMobile = computed(() => useBasicStore().isMobile);
 
+      const route = useRoute();
       const router = useRouter();
 
       const noState = {
+        isEdit: false,
         toolbarConfigSimple: {
           excludeKeys: [
             'bulletedList',
@@ -105,7 +107,7 @@
         handleCreated: (editor: any) => {
           shallow.editorRef = editor; // 记录 editor 实例，重要！
         },
-        save: () => {
+        save: (needBack = false) => {
           return new Promise<void>((resolve) => {
             shallow.formRef.validate().then(() => {
               const data = JSON.parse(JSON.stringify(state.formState));
@@ -116,6 +118,7 @@
               ArticleApi.add(data)
                 .then(() => {
                   notification.success({ message: '保存成功' });
+                  needBack && router.push({ name: 'article' });
                   resolve();
                 })
                 .catch(() => {});
@@ -135,6 +138,22 @@
           state.rerend = true;
         });
       });
+
+      const dataFn = {
+        init: () => {
+          noState.isEdit = !!route.query?.id;
+          if (noState.isEdit) {
+            ArticleApi.pfDetail({ id: route.query?.id })
+              .then((res) => {
+                state.valueHtml = res.content;
+                state.formState.title = res.title;
+                state.formState.bgPic = res.bgPic;
+              })
+              .catch(() => {});
+          }
+        },
+      };
+      onMounted(() => dataFn.init());
 
       return {
         ...toRefs(shallow),

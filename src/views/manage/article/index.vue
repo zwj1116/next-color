@@ -10,11 +10,11 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex === 'action'">
           <div class="flex items-center">
-            <router-link :to="{ name: 'detailarticle' }">
+            <router-link :to="{ name: 'detailarticle', query: { id: record.id } }">
               <a>详情</a>
             </router-link>
             <a-divider type="vertical" />
-            <router-link :to="{ name: 'opArticle' }">
+            <router-link :to="{ name: 'opArticle', query: { id: record.id } }">
               <a>编辑</a>
             </router-link>
             <a-divider type="vertical" />

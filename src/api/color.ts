@@ -18,7 +18,7 @@ export default {
   page: (params: any, pageNum = 1, pageSize = 10) =>
     defHttp.get({ url: `${Api.page}/${pageNum}/${pageSize}`, data: params }),
   add: (params: any) => defHttp.post({ url: Api.add, data: params }),
-  del: (params: string) => defHttp.delete({ url: `${Api.del}`, params }),
+  del: (params: any) => defHttp.delete({ url: `${Api.del}`, params }),
   update: (params: any) => defHttp.post({ url: Api.update, data: params }),
   pfDetail: (params: any) => defHttp.get({ url: Api.pfDetail, params }),
 };

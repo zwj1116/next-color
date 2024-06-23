@@ -13,7 +13,7 @@ export const allRoutes = [
     path: '/',
     name: 'blog',
     component: () => import('@/views/layout/BlogLayout.vue'),
-    redirect: '/vArticle',
+    redirect: '/vColor',
     meta: {
       title: '主页',
       keepAlive: true,
