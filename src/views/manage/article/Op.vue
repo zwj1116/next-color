@@ -4,6 +4,9 @@
       <a-form-item label="标题" name="title" :rules="[{ required: true, message: '请输入标题' }]">
         <a-input v-model:value="formState.title" />
       </a-form-item>
+      <a-form-item label="背景图片" name="bgPic">
+        <PicUpload :fileList="formState.bgPic" />
+      </a-form-item>
     </a-form>
     <div
       :class="[
@@ -43,9 +46,10 @@
   import { notification } from 'ant-design-vue';
   import { useRouter } from 'vue-router';
   import { useBasicStore } from '@/store/modules/basic';
+  import PicUpload from '@/components/PicUpload/index.vue';
 
   export default defineComponent({
-    components: { Editor, Toolbar },
+    components: { Editor, Toolbar, PicUpload },
     setup() {
       const shallow = shallowReactive({
         editorRef: null as any,
@@ -55,6 +59,7 @@
         valueHtml: '<p>hello</p>',
         formState: {
           title: '' as string,
+          bgPic: [],
         },
         rerend: true,
       });
@@ -103,7 +108,12 @@
         save: () => {
           return new Promise<void>((resolve) => {
             shallow.formRef.validate().then(() => {
-              ArticleApi.add({ title: state.formState.title, content: shallow.editorRef.getHtml() })
+              const data = JSON.parse(JSON.stringify(state.formState));
+              data.bgPic = JSON.stringify(data.bgPic);
+              data.content = shallow.editorRef.getHtml();
+              data.contentStr = shallow.editorRef.getText();
+              data.count = data.contentStr.length;
+              ArticleApi.add(data)
                 .then(() => {
                   notification.success({ message: '保存成功' });
                   resolve();

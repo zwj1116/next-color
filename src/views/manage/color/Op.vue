@@ -84,7 +84,7 @@
         <a-button>返回</a-button>
       </router-link>
       <a-button type="primary" @click="btnFn.save">暂存</a-button>
-      <a-button type="primary" @click="btnFn.save">保存</a-button>
+      <a-button type="primary" @click="btnFn.save(true)">保存</a-button>
     </div>
   </div>
 </template>
@@ -93,7 +93,7 @@
   import PicUpload from '@/components/PicUpload/index.vue';
   import ColorApi from '@/api/color';
   import { notification } from 'ant-design-vue';
-  import { useRoute } from 'vue-router';
+  import { useRoute, useRouter } from 'vue-router';
   import UploadApi from '@/api/upload';
 
   const defaultItem = {
@@ -110,6 +110,7 @@
     components: { PicUpload },
     setup() {
       const route = useRoute();
+      const router = useRouter();
       const noState = {
         isEdit: false,
       };
@@ -135,7 +136,7 @@
               .catch(() => {});
           }
         },
-        save: () => {
+        save: (needBack = false) => {
           state.formRef.validate().then(() => {
             const data = JSON.parse(JSON.stringify(state.formState));
             data.livePic = JSON.stringify(data.livePic);
@@ -144,6 +145,7 @@
             ColorApi[noState.isEdit ? 'update' : 'add'](data)
               .then(() => {
                 notification.success({ message: '保存成功' });
+                needBack && router.push({ name: 'color' });
               })
               .catch(() => {});
           });

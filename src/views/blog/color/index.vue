@@ -35,22 +35,19 @@
         </div>
       </div>
       <div v-if="displayStatus === 1" class="flex flex-wrap">
-        <div v-for="(item, index) in 21" :key="index" class="p-4 lg:w-1/5 sm:w-full">
+        <div v-for="item in list" :key="item.id" class="p-4 lg:w-1/5 sm:w-fullmax-sm:w-full">
           <div
             class="h-full flex flex-col items-center text-center hover:shadow-lg transition-all duration-300 cursor-pointer rounded-lg"
           >
-            <img
-              alt="team"
-              class="flex-shrink-0 rounded-lg w-full h-56 object-cover object-center mb-4"
-              src="https://dummyimage.com/200x200"
+            <div
+              class="flex-shrink-0 rounded-lg w-full h-36 object-cover object-center mb-2"
+              :style="{ background: item.rgb }"
             />
             <div class="w-full">
-              <h2 class="title-font font-medium text-lg text-gray-900">Alper Kamu</h2>
-              <h3 class="text-gray-500 mb-3">UI Developer</h3>
-              <p class="mb-4"
-                >DIY tote bag drinking vinegar cronut adaptogen squid fanny pack vaporware.</p
-              >
-              <span class="inline-flex">
+              <h2 class="title-font font-medium text-lg text-gray-900">{{ item.name }}</h2>
+              <h3 class="text-gray-500 mb-3">{{ item.rgb }} </h3>
+              <p class="mb-2 line-clamp-3" :title="item.abstract">{{ item.abstract }}</p>
+              <!-- <span class="inline-flex">
                 <a class="text-gray-500">
                   <svg
                     fill="none"
@@ -94,30 +91,28 @@
                     ></path>
                   </svg>
                 </a>
-              </span>
+              </span> -->
             </div>
           </div>
         </div>
       </div>
       <div v-else-if="displayStatus === 2" class="flex flex-wrap">
-        <div v-for="(item, index) in 21" :key="index" class="lg:w-1/5 md:w-1/4 sm:w-1/2 p-4">
+        <div v-for="item in list" :key="item.id" class="lg:w-1/5 md:w-1/4 sm:w-1/2 p-4">
           <div class="flex relative hover:shadow-lg transition-all duration-300 cursor-pointer">
-            <img
-              alt="gallery"
+            <div
               class="absolute inset-0 w-full h-full object-cover object-center rounded-lg"
-              src="https://dummyimage.com/600x360"
+              :style="{ background: item.rgb }"
             />
             <div
               class="px-8 py-10 relative z-10 w-full border-4 border-gray-200 bg-white opacity-0 hover:opacity-100 rounded-lg transition-all duration-300"
             >
-              <h2 class="tracking-widest text-sm title-font font-medium text-indigo-500 mb-1"
-                >THE SUBTITLE</h2
-              >
-              <h1 class="title-font text-lg font-medium text-gray-900 mb-3">Shooting Stars</h1>
-              <p class="leading-relaxed"
-                >Photo booth fam kinfolk cold-pressed sriracha leggings jianbing microdosing tousled
-                waistcoat.</p
-              >
+              <h2 class="tracking-widest text-sm title-font font-medium text-indigo-500 mb-1">{{
+                item.name
+              }}</h2>
+              <h1 class="title-font text-lg font-medium text-gray-900 mb-3">{{ item.rgb }}</h1>
+              <p class="leading-relaxed line-clamp-3 h-16" :title="item.abstract">
+                {{ item.abstract }}
+              </p>
             </div>
           </div>
         </div>
@@ -127,17 +122,30 @@
 </template>
 <script lang="ts">
   import { defineComponent, reactive, toRefs } from 'vue';
+  import ColorApi from '@/api/color';
 
   export default defineComponent({
     setup() {
       const state = reactive({
         displayStatus: 1 as number,
+        list: [] as any,
       });
       const btn = {
         changeDisplayStatus(status: number) {
           state.displayStatus = status;
         },
       };
+      const dataFn = {
+        init: () => {
+          state.list.lenth = 0;
+          ColorApi.list()
+            .then((res: any) => {
+              state.list.push(...res);
+            })
+            .catch(() => {});
+        },
+      };
+      onMounted(() => dataFn.init());
       return {
         ...toRefs(state),
         btn,

@@ -1,6 +1,5 @@
 <template>
-  <div class="flex flex-col gap-3 h-full">
-    <Return :isTitle="true" message="文章列表"></Return>
+  <div class="flex flex-col gap-3 h-full overflow-hidden">
     <div class="flex gap-2 justify-end">
       <a-button type="primary" @click="btnFn.refresh">搜索</a-button>
       <router-link :to="{ name: 'opColor' }">
@@ -9,8 +8,14 @@
     </div>
     <ResonsiveTable ref="tableRef" :columns="columns" :api="ColorApi.page">
       <template #bodyCell="{ column, record }">
-        <template v-if="column.dataIndex === 'action'">
+        <template v-if="column.dataIndex === 'rgb'">
           <div class="flex gap-2 items-center">
+            <div class="w-5 h-5 rounded" :style="{ background: record.rgb }"></div>
+            <span>{{ record.rgb }}</span>
+          </div>
+        </template>
+        <template v-if="column.dataIndex === 'action'">
+          <div class="flex gap-2 items-center whitespace-nowrap">
             <router-link :to="{ name: 'detailColor', query: { id: record.id } }">
               <a>详情</a>
             </router-link>
