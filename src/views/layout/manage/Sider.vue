@@ -10,7 +10,7 @@
       v-model:selectedKeys="selectedKeys"
       v-model:openKeys="openKey"
       mode="inline"
-      theme="dark"
+      theme="light"
       :items="menus"
       class="h-full border-r-0"
       @select="btnFn.select"

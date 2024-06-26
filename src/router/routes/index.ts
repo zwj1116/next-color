@@ -147,6 +147,18 @@ export const allRoutes = [
           keepAlive: true,
         },
       },
+      {
+        path: 'dict',
+        name: 'dict',
+        component: () => import('@/views/manage/dict/index.vue'),
+        meta: {
+          title: '字典列表',
+          parentPath: 'manage',
+          menuPath: 'dict',
+          needBack: false,
+          keepAlive: true,
+        },
+      },
     ],
   },
 ];
