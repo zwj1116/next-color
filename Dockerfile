@@ -29,5 +29,6 @@ COPY nginx.conf /etc/nginx/nginx.conf
 EXPOSE 80  
 CMD ["nginx", "-g", "daemon off;"]
 
+# dockers stop --
 # docker build -t vue .
 # docker run -d -p 327:80 vue

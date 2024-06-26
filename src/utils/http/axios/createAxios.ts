@@ -5,13 +5,14 @@ import { notification } from 'ant-design-vue';
 import { ContentTypeEnum, TIME_OUT } from '@/enums/httpEnum';
 import { checkStatus } from '@/utils/http/axios/checkStatus';
 import { PageEnum } from '@/enums/pageEnum';
-import { useUserStore } from '@/store/modules/user';
+import { useBasicStore } from '@/store/modules/basic';
 import { RequestCanceler } from './axiosCancel';
+import router from '@/router';
 
 const axiosCanceler = new RequestCanceler();
 const service: AxiosInstance = axios.create({
   timeout: 10 * 1000, // 请求超时时间
-  baseURL: '/yk',
+  baseURL: '/zwj',
   withCredentials: true,
   headers: {
     'Content-type': ContentTypeEnum.JSON,
@@ -20,7 +21,7 @@ const service: AxiosInstance = axios.create({
 
 service.interceptors.request.use(
   (config: AxiosRequestConfig) => {
-    const token = useUserStore().getToken;
+    const token = useBasicStore().getToken;
     if (token && config.headers) {
       config.headers[TOKEN_KEY] = token;
     }
@@ -49,7 +50,7 @@ const err = (error: AxiosError<any>) => {
   return Promise.reject(error);
 };
 
-const needReLoginCodes: Array<number> = [2, 3, 4]; //需要重新登录的code
+const needReLoginCodes: Array<number> = [401, 3, 4]; //需要重新登录的code
 service.interceptors.response.use((response: AxiosResponse) => {
   axiosCanceler.removePendingRequest(response.config);
   const responseCode: number = response.status;
@@ -84,7 +85,8 @@ export function showNft(errorMsg: string): void {
 export function reLogin(): void {
   setTimeout(() => {
     Persistent.removeLocal(TOKEN_KEY);
-    window.location.replace(PageEnum.LOGIN);
+    // window.location.replace(PageEnum.LOGIN);
+    router.push({ name: PageEnum.LOGIN });
   }, 1500);
 }
 

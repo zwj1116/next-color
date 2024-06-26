@@ -29,6 +29,15 @@ export const allRoutes = [
         },
       },
       {
+        path: 'vArticleDetail',
+        name: 'vArticleDetail',
+        component: () => import('@/views/blog/article/Detail.vue'),
+        meta: {
+          title: '概览',
+          keepAlive: true,
+        },
+      },
+      {
         path: 'vColor',
         name: 'vColor',
         component: () => import('@/views/blog/color/index.vue'),

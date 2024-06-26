@@ -1,4 +1,4 @@
-import { useUserStore } from '@/store/modules/user';
+import { useBasicStore } from '@/store/modules/user';
 
 export function downloadByUrl({
   url,
@@ -43,7 +43,7 @@ export function downloadByUrl({
 export function downloadByBlob(url: string, fileName: string) {
   const xhr = new XMLHttpRequest();
   xhr.open('get', url);
-  xhr.setRequestHeader('token', useUserStore().getToken);
+  xhr.setRequestHeader('token', useBasicStore().getToken);
   xhr.responseType = 'blob';
   xhr.onload = function () {
     if (this.status === 200) {

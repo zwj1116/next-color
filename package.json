@@ -24,6 +24,7 @@
     "@wangeditor/editor-for-vue": "^5.1.12",
     "ant-design-vue": "4.x",
     "axios": "^1.4.0",
+    "crypto": "^1.0.1",
     "crypto-js": "^4.2.0",
     "dayjs": "^1.11.9",
     "lockr": "^0.8.5",

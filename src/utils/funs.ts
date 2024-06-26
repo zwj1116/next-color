@@ -1,5 +1,6 @@
 import type { App, Plugin } from 'vue';
 import { useBasicStore } from '@/store/modules/basic';
+import CryptoJS from 'crypto-js';
 
 export function isNotEmpty(obj: any): boolean {
   return obj !== '' && obj != null;
@@ -48,4 +49,19 @@ export const checkScreenSize = () => {
   window.addEventListener('resize', () => {
     useBasicStore().setIsMobile(window.innerWidth < 640);
   });
+};
+
+export const encrypt = (pwd: string) => {
+  const key = CryptoJS.enc.Utf8.parse('Zwj592501428@'); // 注意：密钥必须是32位
+  const iv = CryptoJS.enc.Utf8.parse('Zwj592501428@'); // 注意：向量通常为16位
+
+  // 使用AES加密
+  const encrypted = CryptoJS.AES.encrypt(pwd, key, {
+    iv: iv,
+    mode: CryptoJS.mode.CBC,
+    padding: CryptoJS.pad.Pkcs7,
+  });
+
+  // 将加密后的数据转换为Base64字符串以便传输
+  return encrypted.toString(CryptoJS.format.Base64);
 };

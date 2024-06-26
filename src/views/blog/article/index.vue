@@ -145,18 +145,34 @@
   </section>
 </template>
 <script lang="ts">
-  import { defineComponent, reactive, toRefs } from 'vue';
+  import { defineComponent, onMounted, reactive, toRefs } from 'vue';
+  import ArticleApi from '@/api/article';
 
   export default defineComponent({
     setup() {
       const state = reactive({
         displayStatus: 2 as number,
+        list: [] as any,
       });
+
       const btn = {
         changeDisplayStatus(status: number) {
           state.displayStatus = status;
         },
       };
+      const dataFn = {
+        init: () => {
+          state.list.length = 0;
+          ArticleApi.page({}, 1, 10)
+            .then((res: any) => {
+              state.list.push(...res);
+            })
+            .catch(() => {});
+        },
+      };
+
+      onMounted(() => dataFn.init());
+
       return {
         ...toRefs(state),
         btn,

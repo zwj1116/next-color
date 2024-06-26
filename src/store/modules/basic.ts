@@ -1,26 +1,43 @@
 import { defineStore } from 'pinia';
+import { Persistent } from '@/utils/cache/persistent';
+import { TOKEN_KEY } from '@/enums/cacheEnum';
 
 interface BasicState {
   isMobile: boolean;
+  token: string;
+  userInfo: any;
 }
 
-// 命名以 `use` 开头且以 `Store` 结尾。(比如 `useUserStore`，`useCartStore`，`useProductStore`)
-// 第一个参数是你的应用中 Store 的唯一 ID。
 export const useBasicStore = defineStore('basic', {
   // ref()
   state: (): BasicState => ({
     isMobile: window.innerWidth < 640,
+    token: '',
+    userInfo: null,
   }),
   // computed()
   getters: {
     getIsMobile(): boolean {
       return this.isMobile;
     },
+    getToken(): string {
+      return this.token || Persistent.getLocal(TOKEN_KEY);
+    },
+    getUserInfo(): any {
+      return this.userInfo;
+    },
   },
   // function()
   actions: {
     setIsMobile(data: boolean) {
       this.isMobile = data;
+    },
+    setToken(info: string | undefined) {
+      this.token = info ? info : '';
+      Persistent.setLocal(TOKEN_KEY, this.token);
+    },
+    setUserInfo(info: any) {
+      this.userInfo = info;
     },
   },
 });

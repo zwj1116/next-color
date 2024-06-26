@@ -33,6 +33,15 @@
         >
           <svg-icon icon-class="gallery" class="cursor-pointer hover:shadow-lg" />
         </div>
+        <div
+          :class="[
+            'p-2 hover:bg-white rounded duration-300 transition-all',
+            displayStatus === 2 ? 'bg-white shadow-lg' : '',
+          ]"
+          @click="btn.changeDisplayStatus(3)"
+        >
+          <svg-icon icon-class="list-ul" class="cursor-pointer hover:shadow-lg" />
+        </div>
       </div>
       <div v-if="displayStatus === 1" class="flex flex-wrap">
         <div v-for="item in list" :key="item.id" class="p-4 lg:w-1/5 sm:w-fullmax-sm:w-full">
@@ -117,17 +126,34 @@
           </div>
         </div>
       </div>
+      <div v-else-if="displayStatus === 3" class="flex flex-wrap">
+        <div v-for="item in list" :key="item.id" class="p-4 lg:w-1/2">
+          <div
+            class="h-full flex sm:flex-row flex-col items-center sm:justify-start justify-center text-center sm:text-left"
+          >
+            <div
+              class="flex-shrink-0 rounded-lg w-48 h-48 mb-2"
+              :style="{ background: item.rgb }"
+            />
+            <div class="flex-grow sm:pl-8">
+              <h2 class="title-font font-medium text-lg text-gray-900">{{ item.name }}</h2>
+              <h3 class="text-gray-500 mb-3">{{ item.rgb }}</h3>
+              <p class="mb-4">{{ item.abstract }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 </template>
 <script lang="ts">
-  import { defineComponent, reactive, toRefs } from 'vue';
+  import { defineComponent, onMounted, reactive, toRefs } from 'vue';
   import ColorApi from '@/api/color';
 
   export default defineComponent({
     setup() {
       const state = reactive({
-        displayStatus: 1 as number,
+        displayStatus: 3 as number,
         list: [] as any,
       });
       const btn = {
@@ -145,7 +171,9 @@
             .catch(() => {});
         },
       };
+
       onMounted(() => dataFn.init());
+
       return {
         ...toRefs(state),
         btn,

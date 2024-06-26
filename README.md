@@ -117,4 +117,4 @@ npm run release
     ├── prettier.config.js   // 代码格式化的工具，美化代码
     ├── README.md            // 项目描述文件
     ├── tsconfig.json        // ts配置文件
-    ├── yk_vue_screen.yaml   // 项目k8s发布配置文件，需根据项目名修改
+    ├── zwj_vue_screen.yaml   // 项目k8s发布配置文件，需根据项目名修改

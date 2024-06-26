@@ -27,9 +27,9 @@
             </a-form-item>
             <button
               class="bg-blue-500 w-full py-3 rounded-xl text-white shadow-xl hover:shadow-inner focus:outline-none transition duration-500 ease-in-out transform hover:-translate-x hover:scale-105"
-              @click="dataFn.login"
+              @click="dataFn.register"
             >
-              Login
+              注册
             </button>
             <div class="flex mt-7 items-center text-center">
               <hr class="border-gray-300 border-1 w-full rounded-md" />
@@ -58,6 +58,7 @@
   import { defineComponent, onMounted, reactive, shallowReactive, toRefs } from 'vue';
   import { SystemApi } from '@/api/system';
   import { useRouter } from 'vue-router';
+  import { encrypt } from '@/utils/funs';
 
   export default defineComponent({
     setup() {
@@ -81,14 +82,17 @@
             state.formState.uuid = res.uuid;
           });
         },
-        login: () => {
+        register: () => {
           shallow.formRef.validate().then(() => {
-            SystemApi.register(state)
-              .then((res) => {
-                console.log(res);
+            const data = JSON.parse(JSON.stringify(state.formState));
+            data.pwd = encrypt(state.formState.pwd);
+            SystemApi.register(data)
+              .then(() => {
                 router.push({ name: 'login' });
               })
-              .catch(() => {});
+              .catch(() => {
+                dataFn.captcha();
+              });
           });
         },
       };

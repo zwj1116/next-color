@@ -6,7 +6,7 @@
         <a-button>添加</a-button>
       </router-link>
     </div>
-    <ResonsiveTable ref="tableRef" :columns="columns" :api="ArticleApi.page">
+    <ResonsiveTable ref="tableRef" :columns="columns" :api="ArticleApi.pfPage">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex === 'action'">
           <div class="flex items-center">
@@ -48,7 +48,7 @@
             content: `确定删除【${record.title}吗？】`,
             async onOk() {
               return await new Promise<void>((resolve, reject) => {
-                ArticleApi.del(record.id)
+                ArticleApi.del({ id: record.id })
                   .then(() => {
                     notification.success({ message: '删除成功！' });
                     btnFn.refresh();

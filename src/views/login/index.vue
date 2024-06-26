@@ -55,14 +55,17 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, onMounted, reactive, shallowReactive, toRefs } from 'vue';
+  import { defineComponent, onMounted, reactive, shallowRef, toRefs } from 'vue';
   import { SystemApi } from '@/api/system';
+  import { encrypt } from '@/utils/funs';
+  import { useBasicStore } from '@/store/modules/basic';
+  import { useRouter } from 'vue-router';
 
   export default defineComponent({
     setup() {
-      const shallow = shallowReactive({
-        formRef: null as any,
-      });
+      const useBasicUse = useBasicStore();
+      const router = useRouter();
+      const formRef = shallowRef();
       const state = reactive({
         svg: null as any,
         formState: {
@@ -80,17 +83,24 @@
           });
         },
         login: () => {
-          shallow.formRef.validate().then(() => {
-            SystemApi.login(state)
-              .then((res) => {
+          formRef.value.validate().then(() => {
+            const data = JSON.parse(JSON.stringify(state.formState));
+            data.pwd = encrypt(state.formState.pwd);
+            SystemApi.login(data)
+              .then((res: any) => {
+                useBasicUse.setToken(res.token);
                 SystemApi.userInfo()
-                  .then((info) => {
-                    console.log(res);
-                    console.log(info);
+                  .then((info: any) => {
+                    useBasicUse.setUserInfo(info);
+                    router.push({ name: 'vColor' });
                   })
-                  .catch(() => {});
+                  .catch(() => {
+                    dataFn.captcha();
+                  });
               })
-              .catch(() => {});
+              .catch(() => {
+                dataFn.captcha();
+              });
           });
         },
       };
@@ -99,7 +109,7 @@
       return {
         dataFn,
         ...toRefs(state),
-        ...toRefs(shallow),
+        formRef,
       };
     },
   });
