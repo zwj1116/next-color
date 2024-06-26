@@ -39,6 +39,7 @@
   import { Modal, notification } from 'ant-design-vue';
 
   export default defineComponent({
+    name: 'Color',
     components: { ResonsiveTable },
     setup() {
       const shallow = shallowReactive({

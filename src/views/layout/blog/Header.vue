@@ -25,7 +25,9 @@
         <router-link :to="{ name: 'vColor' }">
           <a class="mr-5 hover:text-gray-900">Second Link</a>
         </router-link>
-        <a class="mr-5 hover:text-gray-900">Third Link</a>
+        <router-link :to="{ name: 'manage' }">
+          <a class="mr-5 hover:text-gray-900">Third Link</a>
+        </router-link>
         <a class="mr-5 hover:text-gray-900">Fourth Link</a>
       </nav>
       <button

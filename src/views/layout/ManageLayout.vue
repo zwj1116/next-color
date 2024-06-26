@@ -32,7 +32,9 @@
               :name="route.meta.menuPath"
               :class="[isMobile ? 'ml-8' : '']"
             />
-            <router-view></router-view>
+            <keep-alive :include="KeepAliveList">
+              <router-view></router-view>
+            </keep-alive>
           </div>
         </a-layout-content>
       </a-layout>
@@ -50,10 +52,25 @@
     components: { Sider, Return },
     setup() {
       const route = useRoute();
+      const state = reactive({
+        KeepAliveList: [] as any,
+      });
       const isMobile = computed(() => useBasicStore().isMobile);
+
+      watch(
+        route,
+        (val: any) => {
+          if (val.meta.keepAlive && !state.KeepAliveList.includes(val.name)) {
+            state.KeepAliveList.push(val.name);
+          }
+        },
+        { immediate: true }
+      );
+
       return {
         route,
         isMobile,
+        ...toRefs(state),
       };
     },
   });

@@ -43,9 +43,12 @@
                   @click="btnFn.removeUser(item)"
                 />
               </template>
+              <a-form-item :name="['items', index, 'alias']" label="别名" class="w-1/2">
+                <a-input v-model:value="item.alias" placeholder="请输入别名" />
+              </a-form-item>
               <div class="flex gap-2">
-                <a-form-item :name="['items', index, 'name']" label="名称" class="w-1/2">
-                  <a-input v-model:value="item.name" placeholder="请输入名称" />
+                <a-form-item :name="['items', index, 'name']" label="书名" class="w-1/2">
+                  <a-input v-model:value="item.name" placeholder="请输入书名" />
                 </a-form-item>
                 <a-form-item :name="['items', index, 'isFirst']" label="第一次出现" class="w-1/2">
                   <a-switch v-model:checked="item.isFirst" />
@@ -60,13 +63,13 @@
                 </a-form-item>
               </div>
               <a-form-item :name="['items', index, 'origin']" label="内容">
-                <a-input v-model:value="item.origin" placeholder="请输入内容" />
+                <a-textarea v-model:value="item.origin" placeholder="请输入内容" autoSize />
               </a-form-item>
               <a-form-item :name="['items', index, 'link']" label="链接">
                 <a-input v-model:value="item.link" placeholder="请输入链接" />
               </a-form-item>
               <a-form-item :name="['items', index, 'desc']" label="备注">
-                <a-input v-model:value="item.desc" placeholder="请输入备注" />
+                <a-textarea v-model:value="item.desc" placeholder="请输入备注" autoSize />
               </a-form-item>
               <a-form-item :name="['items', index, 'originPic']" label="图片">
                 <PicUpload :fileList="item.originPic" />
@@ -100,6 +103,7 @@
   import UploadApi from '@/api/upload';
 
   const defaultItem = {
+    alias: null,
     name: null,
     author: null,
     time: null,
