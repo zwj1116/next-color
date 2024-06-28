@@ -152,7 +152,7 @@ export const allRoutes = [
         name: 'dict',
         component: () => import('@/views/manage/dict/index.vue'),
         meta: {
-          title: '字典列表',
+          title: '字典管理',
           parentPath: 'manage',
           menuPath: 'dict',
           needBack: false,

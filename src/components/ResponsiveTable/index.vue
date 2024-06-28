@@ -22,12 +22,12 @@
       </div>
     </div>
     <a-pagination
-      v-model:current="paginaiton.current"
-      v-model:page-size="paginaiton.pageSize"
+      v-model:current="pagination.current"
+      v-model:page-size="pagination.pageSize"
       class="text-right"
       show-quick-jumper
       showSizeChanger
-      :total="paginaiton.total"
+      :total="pagination.total"
       :show-total="(total) => `总共 ${total} 条`"
       @change="tableFn.onChange"
       @show-size-change="tableFn.showSizeChange"
@@ -44,11 +44,15 @@
         type: Function,
         default: () => {},
       },
+      apiCb: {
+        type: Function,
+        default: () => {},
+      },
     },
     setup(props) {
       const state = reactive({
         dataSource: [] as any,
-        paginaiton: {
+        pagination: {
           current: 1,
           pageSize: 10,
           total: 0,
@@ -61,16 +65,19 @@
           state.dataSource.length = 0;
           props.api &&
             props
-              .api({}, state.paginaiton.current, state.paginaiton.pageSize)
+              .api({}, state.pagination.current, state.pagination.pageSize)
               .then((res: any) => {
                 res.list.forEach((e: any) => {
                   e.createTimeStr = formatToDateTime(e.createTime);
                   e.updateTimeStr = formatToDateTime(e.updateTime);
                 });
-                state.dataSource.push(...res.list);
-                state.paginaiton.current = res.pageNum;
-                state.paginaiton.total = res.total;
-                state.loading = false;
+                state.pagination.current = res.pageNum;
+                state.pagination.total = res.total;
+                props.apiCb &&
+                  props.apiCb(res.list).then((data: any) => {
+                    state.dataSource.push(...data);
+                    state.loading = false;
+                  });
               })
               .catch(() => {});
         },

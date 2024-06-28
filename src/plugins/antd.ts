@@ -22,6 +22,7 @@ import {
   Card,
   Upload,
   Image,
+  Tree,
 } from 'ant-design-vue';
 
 const components = [
@@ -46,6 +47,7 @@ const components = [
   Card,
   Upload,
   Image,
+  Tree,
 ];
 
 export default function setupAntd(app: App<Element>) {
