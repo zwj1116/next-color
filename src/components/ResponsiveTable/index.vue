@@ -46,7 +46,11 @@
       },
       apiCb: {
         type: Function,
-        default: () => {},
+        default: () => new Promise((resolve: any) => resolve()),
+      },
+      needGet: {
+        type: Boolean,
+        default: true,
       },
     },
     setup(props) {
@@ -60,12 +64,12 @@
         loading: false,
       });
       const tableFn = {
-        get: () => {
+        get: (where = {}) => {
           state.loading = true;
           state.dataSource.length = 0;
           props.api &&
             props
-              .api({}, state.pagination.current, state.pagination.pageSize)
+              .api(where, state.pagination.current, state.pagination.pageSize)
               .then((res: any) => {
                 res.list.forEach((e: any) => {
                   e.createTimeStr = formatToDateTime(e.createTime);
@@ -73,9 +77,9 @@
                 });
                 state.pagination.current = res.pageNum;
                 state.pagination.total = res.total;
+                state.dataSource.push(...res.list);
                 props.apiCb &&
-                  props.apiCb(res.list).then((data: any) => {
-                    state.dataSource.push(...data);
+                  props.apiCb(state.dataSource).then(() => {
                     state.loading = false;
                   });
               })
@@ -88,7 +92,7 @@
           tableFn.get();
         },
       };
-      onMounted(() => tableFn.get());
+      onMounted(() => props.needGet && tableFn.get());
       return {
         tableFn,
         ...toRefs(state),

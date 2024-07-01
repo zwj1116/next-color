@@ -23,6 +23,7 @@ import {
   Upload,
   Image,
   Tree,
+  Cascader,
 } from 'ant-design-vue';
 
 const components = [
@@ -48,6 +49,7 @@ const components = [
   Upload,
   Image,
   Tree,
+  Cascader,
 ];
 
 export default function setupAntd(app: App<Element>) {

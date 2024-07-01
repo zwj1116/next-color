@@ -6,7 +6,7 @@
         <a-button>添加</a-button>
       </router-link>
     </div>
-    <ResonsiveTable ref="tableRef" :columns="columns" :api="ColorApi.page">
+    <ResponsiveTable ref="tableRef" :columns="columns" :api="ColorApi.page">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex === 'rgb'">
           <div class="flex gap-2 items-center">
@@ -28,19 +28,19 @@
           </div>
         </template>
       </template>
-    </ResonsiveTable>
+    </ResponsiveTable>
   </div>
 </template>
 <script lang="ts">
   import { defineComponent, shallowReactive, toRefs } from 'vue';
-  import ResonsiveTable from '@/components/ResponsiveTable/index.vue';
+  import ResponsiveTable from '@/components/ResponsiveTable/index.vue';
   import ColorApi from '@/api/color';
   import { columns } from './config';
   import { Modal, notification } from 'ant-design-vue';
 
   export default defineComponent({
     name: 'Color',
-    components: { ResonsiveTable },
+    components: { ResponsiveTable },
     setup() {
       const shallow = shallowReactive({
         tableRef: null as any,

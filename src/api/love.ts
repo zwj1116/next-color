@@ -1,14 +1,13 @@
 import { defHttp } from '@/utils/http/axios';
 
-const prefix = 'dict';
+const prefix = 'love';
 
 const Api = {
   page: 'page',
   add: 'add',
   del: 'del',
   update: 'update',
-  tree: 'tree',
-  list: 'list',
+  detail: 'detail',
 } as any;
 
 Object.keys(Api).forEach((e) => (Api[e] = `${prefix}/${Api[e]}`));
@@ -19,7 +18,6 @@ export default {
   },
   add: (params: any) => defHttp.post({ url: Api.add, data: params }),
   del: (params: any) => defHttp.delete({ url: `${Api.del}`, params }),
-  update: (params: any) => defHttp.post({ url: Api.update, params }),
-  tree: () => defHttp.get({ url: Api.tree }),
-  list: () => defHttp.get({ url: Api.list }),
+  update: (params: any) => defHttp.post({ url: Api.update, data: params }),
+  detail: (params: any) => defHttp.get({ url: Api.detail, params }),
 };

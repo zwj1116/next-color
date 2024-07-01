@@ -15,7 +15,7 @@
           <span>{{ item.label }}</span>
           <div class="flex gap-3 items-center">
             <EditOutlined class="cursor-pointer" @click="treeFn.editOpen(item)" />
-            <DeleteOutlined class="cursor-pointer" @click="treeFn.del(item)" />
+            <DeleteOutlined class="cursor-pointer" @click="treeFn.del(item, true)" />
           </div>
         </div>
       </div>
@@ -25,23 +25,17 @@
         <a-button type="primary" @click="btnFn.refresh">搜索</a-button>
         <a-button @click="treeFn.pidAdd">添加</a-button>
       </div>
-      <ResonsiveTable ref="tableRef" :columns="columns" :api="DictApi.page" :apiCb="treeFn.get">
+      <ResponsiveTable ref="tableRef" :columns="columns" :api="DictApi.page" :needGet="false">
         <template #bodyCell="{ column, record }">
-          <template v-if="column.dataIndex === 'rgb'">
-            <div class="flex gap-2 items-center">
-              <div class="w-5 h-5 rounded" :style="{ background: record.rgb }"></div>
-              <span>{{ record.rgb }}</span>
-            </div>
-          </template>
           <template v-if="column.dataIndex === 'action'">
             <div class="flex gap-2 items-center whitespace-nowrap">
               <a @click="treeFn.editOpen(record)">编辑</a>
               <a-divider type="vertical" />
-              <a @click="treeFn.del(record)">删除</a>
+              <a @click="treeFn.del(record, false)">删除</a>
             </div>
           </template>
         </template>
-      </ResonsiveTable>
+      </ResponsiveTable>
     </div>
     <a-modal v-model:open="treeOpen" title="字典操作" @ok="treeFn.ok" @cancel="treeFn.cancel">
       <a-form ref="treeRef" :model="formState">
@@ -53,8 +47,8 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, shallowReactive, toRefs, reactive } from 'vue';
-  import ResonsiveTable from '@/components/ResponsiveTable/index.vue';
+  import { defineComponent, shallowReactive, toRefs, reactive, onMounted } from 'vue';
+  import ResponsiveTable from '@/components/ResponsiveTable/index.vue';
   import DictApi from '@/api/dict';
   import { columns } from './config';
   import { Modal, notification } from 'ant-design-vue';
@@ -62,7 +56,7 @@
 
   export default defineComponent({
     name: 'Color',
-    components: { ResonsiveTable, EditOutlined, DeleteOutlined },
+    components: { ResponsiveTable, EditOutlined, DeleteOutlined },
     setup() {
       const shallow = shallowReactive({
         tableRef: null as any,
@@ -82,26 +76,22 @@
       });
       const btnFn = {
         refresh: () => {
-          shallow.tableRef.tableFn.get();
+          if (!state.selectedKey) return;
+          shallow.tableRef.tableFn.get({ pid: state.selectedKey });
         },
       };
       const treeFn = {
-        get: (data: any) => {
+        getTree: () => {
           state.treeData.length = 0;
-          return new Promise((resolve: any) => {
-            const { tree, table } = data.reduce(
-              (t: any, v: any) => {
-                t[Number(v.pid) === -1 ? 'tree' : 'table'].push(v);
-                return t;
-              },
-              { tree: [], table: [] }
-            );
-            state.treeData.push(...tree);
-            if (state.treeData.length) {
-              state.selectedKey = state.treeData[0].id;
-            }
-            resolve(table);
-          });
+          DictApi.tree()
+            .then((res: any) => {
+              state.treeData.push(...res);
+              if (state.treeData.length && !state.selectedKey) {
+                state.selectedKey = state.treeData[0].id;
+              }
+              btnFn.refresh();
+            })
+            .catch(() => {});
         },
         open: () => {
           noState.pid = -1;
@@ -112,9 +102,9 @@
           shallow.treeRef.validate().then(() => {
             DictApi[noState.isAdd ? 'add' : 'update']({ ...state.formState, pid: noState.pid })
               .then(() => {
-                btnFn.refresh();
                 notification.success({ message: '新增成功！' });
                 treeFn.cancel();
+                treeFn.getTree();
               })
               .catch(() => {});
           });
@@ -130,15 +120,20 @@
           noState.pid = state.selectedKey;
           state.treeOpen = true;
         },
-        del: (record: any) => {
+        del: (record: any, isTree: boolean) => {
           Modal.confirm({
             title: '提示',
             content: `确定删除【${record.label}吗？】`,
             async onOk() {
               return await new Promise<void>((resolve, reject) => {
-                DictApi.del({ id: record.id })
+                DictApi.del({ id: record.id, isTree })
                   .then(() => {
-                    btnFn.refresh();
+                    if (isTree) {
+                      state.selectedKey = null;
+                      treeFn.getTree();
+                    } else {
+                      btnFn.refresh();
+                    }
                     notification.success({ message: '删除成功！' });
                     resolve();
                   })
@@ -156,8 +151,12 @@
         },
         select: (record: any) => {
           state.selectedKey = record.id;
+          btnFn.refresh();
         },
       };
+
+      onMounted(() => treeFn.getTree());
+
       return {
         DictApi,
         columns,

@@ -47,7 +47,7 @@ export const compare = (key: any, desc: any) => {
 };
 export const checkScreenSize = () => {
   window.addEventListener('resize', () => {
-    useBasicStore().setIsMobile(window.innerWidth < 640);
+    useBasicStore().setIsMobile(window.innerWidth < 576);
   });
 };
 

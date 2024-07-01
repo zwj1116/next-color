@@ -159,6 +159,41 @@ export const allRoutes = [
           keepAlive: true,
         },
       },
+      {
+        path: 'love',
+        name: 'love',
+        component: () => import('@/views/manage/love/index.vue'),
+        meta: {
+          title: '喜爱列表',
+          parentPath: 'manage',
+          menuPath: 'love',
+          keepAlive: true,
+        },
+      },
+      {
+        path: 'opLove',
+        name: 'opLove',
+        component: () => import('@/views/manage/love/Op.vue'),
+        meta: {
+          title: '喜爱操作',
+          parentPath: 'manage',
+          menuPath: 'love',
+          needBack: true,
+          keepAlive: true,
+        },
+      },
+      {
+        path: 'detailLove',
+        name: 'detailLove',
+        component: () => import('@/views/manage/love/Detail.vue'),
+        meta: {
+          title: '喜爱详情',
+          parentPath: 'manage',
+          menuPath: 'love',
+          needBack: true,
+          keepAlive: true,
+        },
+      },
     ],
   },
 ];
