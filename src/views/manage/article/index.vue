@@ -6,7 +6,12 @@
         <a-button>添加</a-button>
       </router-link>
     </div>
-    <ResponsiveTable ref="tableRef" :columns="columns" :api="ArticleApi.pfPage">
+    <ResponsiveTable
+      ref="tableRef"
+      :columns="columns"
+      :api="ArticleApi.pfPage"
+      :apiCb="btnFn.tableCb"
+    >
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex === 'action'">
           <div class="flex items-center">
@@ -26,11 +31,12 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { computed, defineComponent, shallowReactive, toRefs } from 'vue';
   import ResponsiveTable from '@/components/ResponsiveTable/index.vue';
   import ArticleApi from '@/api/article';
   import { columns } from './config';
   import { Modal, notification } from 'ant-design-vue';
+  import { useBasicStore } from '@/store/modules/basic';
 
   export default defineComponent({
     components: { ResponsiveTable },
@@ -38,9 +44,18 @@
       const shallow = shallowReactive({
         tableRef: null as any,
       });
+      const categoryTree = computed(() => useBasicStore().dict);
       const btnFn = {
         refresh: () => {
           shallow.tableRef.tableFn.get();
+        },
+        tableCb: (data: any) => {
+          return new Promise((resolve: any) => {
+            data.forEach(
+              (e: any) => (e.labelStr = categoryTree.value.toLabel[`${e.dictP}-${e.dictC}`])
+            );
+            resolve();
+          });
         },
         del: (record: any) => {
           Modal.confirm({

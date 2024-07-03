@@ -1,7 +1,7 @@
 <template>
   <section class="text-gray-600 body-font">
     <div class="container px-0 py-12 mx-auto">
-      <div class="flex flex-col text-center w-full mb-8">
+      <div class="flex flex-col text-center w-full mb-4">
         <h2 class="text-xs text-indigo-500 tracking-widest font-medium title-font mb-1"
           >ROOF PARTY POLAROID</h2
         >
@@ -14,37 +14,25 @@
           selfies heirloom prism food truck ugh squid celiac humblebrag.</p
         >
       </div>
-      <div class="flex gap-8 justify-end my-4 title-font sm:text-2xl text-xl">
+      <div class="flex gap-8 justify-end title-font sm:text-2xl text-xl px-4">
         <div
+          v-for="item in toggleIcon"
+          :key="item.value"
           :class="[
             'p-2 hover:bg-white rounded duration-300 transition-all',
-            displayStatus === 1 ? 'bg-white shadow-lg' : '',
+            displayStatus === item.value ? 'bg-white shadow-lg' : '',
           ]"
-          @click="btn.changeDisplayStatus(1)"
+          @click="btn.changeDisplayStatus(item.value)"
         >
-          <svg-icon icon-class="s" class="cursor-pointer hover:shadow-lg" />
-        </div>
-        <div
-          :class="[
-            'p-2 hover:bg-white rounded duration-300 transition-all',
-            displayStatus === 2 ? 'bg-white shadow-lg' : '',
-          ]"
-          @click="btn.changeDisplayStatus(2)"
-        >
-          <svg-icon icon-class="gallery" class="cursor-pointer hover:shadow-lg" />
-        </div>
-        <div
-          :class="[
-            'p-2 hover:bg-white rounded duration-300 transition-all',
-            displayStatus === 2 ? 'bg-white shadow-lg' : '',
-          ]"
-          @click="btn.changeDisplayStatus(3)"
-        >
-          <svg-icon icon-class="list-ul" class="cursor-pointer hover:shadow-lg" />
+          <svg-icon :icon-class="item.icon" class="cursor-pointer hover:shadow-lg" />
         </div>
       </div>
       <div v-if="displayStatus === 1" class="flex flex-wrap">
-        <div v-for="item in list" :key="item.id" class="p-4 lg:w-1/5 sm:w-fullmax-sm:w-full">
+        <div
+          v-for="item in list"
+          :key="item.id"
+          class="xl:w-1/6 lg:w-1/5 md:w-1/4 sm:w-1/3 p-4 max-sm:w-full"
+        >
           <div
             class="h-full flex flex-col items-center text-center hover:shadow-lg transition-all duration-300 cursor-pointer rounded-lg"
           >
@@ -106,20 +94,26 @@
         </div>
       </div>
       <div v-else-if="displayStatus === 2" class="flex flex-wrap">
-        <div v-for="item in list" :key="item.id" class="lg:w-1/5 md:w-1/4 sm:w-1/2 p-4">
-          <div class="flex relative hover:shadow-lg transition-all duration-300 cursor-pointer">
+        <div
+          v-for="item in list"
+          :key="item.id"
+          class="xl:w-1/6 lg:w-1/5 md:w-1/4 sm:w-1/3 p-4 h-52 max-sm:w-full"
+        >
+          <div
+            class="flex relative hover:shadow-lg transition-all duration-300 cursor-pointer h-full"
+          >
             <div
               class="absolute inset-0 w-full h-full object-cover object-center rounded-lg"
               :style="{ background: item.rgb }"
             />
             <div
-              class="px-8 py-10 relative z-10 w-full border-4 border-gray-200 bg-white opacity-0 hover:opacity-100 rounded-lg transition-all duration-300"
+              class="px-4 py-4 relative z-10 w-full border-4 border-gray-200 bg-white opacity-0 hover:opacity-100 rounded-lg transition-all duration-300 h-full"
             >
               <h2 class="tracking-widest text-sm title-font font-medium text-indigo-500 mb-1">{{
                 item.name
               }}</h2>
               <h1 class="title-font text-lg font-medium text-gray-900 mb-3">{{ item.rgb }}</h1>
-              <p class="leading-relaxed line-clamp-3 h-16" :title="item.abstract">
+              <p class="leading-relaxed line-clamp-3" :title="item.abstract">
                 {{ item.abstract }}
               </p>
             </div>
@@ -127,18 +121,16 @@
         </div>
       </div>
       <div v-else-if="displayStatus === 3" class="flex flex-wrap">
-        <div v-for="item in list" :key="item.id" class="p-4 lg:w-1/2">
-          <div
-            class="h-full flex sm:flex-row flex-col items-center sm:justify-start justify-center text-center sm:text-left"
-          >
+        <div v-for="item in list" :key="item.id" class="xl:w-1/3 lg:w-1/2 md:w-1/2 sm:w-full p-4">
+          <div class="h-full flex flex-row items-center sm:justify-start justify-center text-left">
             <div
               class="flex-shrink-0 rounded-lg w-48 h-48 mb-2"
               :style="{ background: item.rgb }"
             />
-            <div class="flex-grow sm:pl-8">
+            <div class="flex-grow sm:pl-8 max-sm:pl-2">
               <h2 class="title-font font-medium text-lg text-gray-900">{{ item.name }}</h2>
               <h3 class="text-gray-500 mb-3">{{ item.rgb }}</h3>
-              <p class="mb-4">{{ item.abstract }}</p>
+              <p class="mb-4 line-clamp-5">{{ item.abstract }}</p>
             </div>
           </div>
         </div>
@@ -152,6 +144,11 @@
 
   export default defineComponent({
     setup() {
+      const toggleIcon = [
+        { icon: 's', value: 1 },
+        { icon: 'gallery', value: 2 },
+        { icon: 'list-ul', value: 3 },
+      ];
       const state = reactive({
         displayStatus: 3 as number,
         list: [] as any,
@@ -177,6 +174,7 @@
       return {
         ...toRefs(state),
         btn,
+        toggleIcon,
       };
     },
   });

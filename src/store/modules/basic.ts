@@ -51,10 +51,10 @@ export const useBasicStore = defineStore('basic', {
           resolve();
           return;
         }
-        this.dict = { list: [], tree: [], toLabel: {} };
+        const dict = { list: [], tree: [], toLabel: {}, toPCLabel: {} } as any;
         DictApi.list()
           .then((res: any) => {
-            this.dict.list.push(...res);
+            dict.list.push(...res);
             const { parent, child } = res.reduce(
               (t: any, v: any) => {
                 t[v.pid === '-1' ? 'parent' : 'child'].push(v);
@@ -69,8 +69,12 @@ export const useBasicStore = defineStore('basic', {
                 (v: any) => (toLabel[`${e.id}-${v.id}`] = `${e.label}-${v.label}`)
               );
             });
-            this.dict.tree = parent;
-            this.dict.toLabel = toLabel;
+            const toPCLabel = {} as any;
+            res.forEach((e: any) => (toPCLabel[e.id] = e.label));
+            dict.tree = parent;
+            dict.toLabel = toLabel;
+            dict.toPCLabel = toPCLabel;
+            this.dict = dict;
             resolve();
           })
           .catch(() => {});

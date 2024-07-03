@@ -46,6 +46,15 @@ export const allRoutes = [
           keepAlive: true,
         },
       },
+      {
+        path: '/404',
+        name: '404',
+        component: () => import('@/views/exception/404.vue'),
+        meta: {
+          title: '404',
+          keepAlive: true,
+        },
+      },
     ],
   },
   {

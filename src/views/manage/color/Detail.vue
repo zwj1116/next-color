@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-3 h-full">
+  <div class="flex flex-col gap-3 h-full overflow-auto">
     <div class="flex flex-col gap-2">
       <div class="flex gap-2">
         <span>名称: </span>

@@ -10,6 +10,11 @@ export const columns = [
     ellipsis: true,
   },
   {
+    title: '标签',
+    dataIndex: 'labelStr',
+    ellipsis: true,
+  },
+  {
     title: '访问量',
     dataIndex: 'look',
     ellipsis: true,

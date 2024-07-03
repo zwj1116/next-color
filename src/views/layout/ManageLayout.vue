@@ -21,16 +21,15 @@
         </router-link>
       </div>
     </a-layout-header>
-    <a-layout class="overflow-hidden" style="height: calc(100% - 64px)">
+    <a-layout class="overflow-hidden flex-row grow">
       <Sider />
-      <a-layout style="padding: 16px">
+      <a-layout style="padding: 16px" class="overflow-hidden">
         <a-layout-content class="overflow-auto">
           <div class="flex flex-col gap-3 h-full">
             <Return
               :isTitle="!route.meta.needBack"
               :message="route.meta.title"
               :name="route.meta.menuPath"
-              :class="[isMobile ? 'ml-8' : '']"
             />
             <keep-alive :include="KeepAliveList">
               <router-view></router-view>
@@ -42,11 +41,10 @@
   </a-layout>
 </template>
 <script lang="ts">
-  import { computed, defineComponent, reactive, toRefs, watch } from 'vue';
+  import { defineComponent, reactive, toRefs, watch } from 'vue';
   import Sider from './manage/Sider.vue';
   import Return from '@/components/Return/index.vue';
   import { useRoute } from 'vue-router';
-  import { useBasicStore } from '@/store/modules/basic';
 
   export default defineComponent({
     components: { Sider, Return },
@@ -55,8 +53,6 @@
       const state = reactive({
         KeepAliveList: [] as any,
       });
-      const isMobile = computed(() => useBasicStore().isMobile);
-
       watch(
         route,
         (val: any) => {
@@ -69,7 +65,6 @@
 
       return {
         route,
-        isMobile,
         ...toRefs(state),
       };
     },

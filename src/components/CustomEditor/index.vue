@@ -7,7 +7,7 @@
   >
     <template v-if="rerend">
       <Toolbar
-        class="border-b"
+        :class="['border-b', isMobile ? 'no-divider' : '']"
         :editor="shallowEditorRef"
         :defaultConfig="!isMobile ? toolbarConfigDefault : toolbarConfigSimple"
         :mode="!isMobile ? 'default' : 'simple'"
@@ -155,4 +155,10 @@
     },
   });
 </script>
-<style lang="less" scoped></style>
+<style lang="less">
+  .no-divider {
+    .w-e-bar-divider {
+      display: none;
+    }
+  }
+</style>
